@@ -501,7 +501,8 @@ tr.detail-row td { padding: 0; border-bottom: 1px solid var(--border); backgroun
 </div>
 
 <nav class="site-nav" id="top-nav">
-  <button class="on" id="btn-overview" onclick="go('overview',this)">Overview</button>
+  <button class="on" id="btn-overview" onclick="go('overview',this)">Frontpage</button>
+  <button id="btn-about" onclick="go('about',this)">About GODWIT</button>
   <div class="nav-dd" id="dd-context" onmouseenter="ddEnter('dd-context','btn-context')" onmouseleave="ddLeave()">
     <button class="nav-dd-btn" id="btn-context" onclick="toggleDd2(event)">
       Context
@@ -521,7 +522,6 @@ tr.detail-row td { padding: 0; border-bottom: 1px solid var(--border); backgroun
       </button>
     </div>
   </div>
-  <button id="btn-about" onclick="go('about',this)">About GODWIT</button>
 
   <div class="nav-dd" id="dd-datasets" onmouseenter="ddEnter('dd-datasets','btn-datasets')" onmouseleave="ddLeave()">
     <button class="nav-dd-btn" id="btn-datasets" onclick="toggleDd(event)">
@@ -560,12 +560,8 @@ tr.detail-row td { padding: 0; border-bottom: 1px solid var(--border); backgroun
   <div class="footer-grid">
     <div class="footer-col">
       <p class="footer-col-head">Contact</p>
-      <a href="mailto:LNK@sdu.dk">LNK@sdu.dk</a>
+      <a href="mailto:GODWIT@sdu.dk">GODWIT@sdu.dk</a>
       <p style="margin-top:.25rem">University of Southern Denmark</p>
-    </div>
-    <div class="footer-col">
-      <p class="footer-col-head">Datasets</p>
-      <p>Faroe Islands (online)<br>Malmø (forthcoming)<br>Denmark (forthcoming)</p>
     </div>
     <div class="footer-col">
       <p class="footer-col-head">Image credit</p>
@@ -685,56 +681,16 @@ function tr(val) {
 
 const DB = {
   faeroerne: [
-    { id:1, sagsid:1, tid:1637, navn:"Rasmus Mogensen", sted:"Nordredal",
-      kon:"Mand", forbrydelse:"Hemmelige kunster", dom:"Skyldig", udfald:"Bødestraf 10 GL",
-      kilde:"N. Andersen, Færøerne 1600-1709 (G.E.C. Gad, 1895): 455.",
-      ordlyd:"1637 var saaledes Rasmus Mogensen paa Nordredal tiltalt for nogen Gjøgleri eller Signen, som han skulde have brugt mod Blasius Joenssøn fra Hestø, der var syg. Rasmus havde raadet Blasius til, at han skulde koge sig en gulbenet Høne, da han mente, at det var den gule Sot,Blasius led af; derhos havde han givet ham et sort Baand med 3 Knuder paa,som han skulde binde om sig; naar han fornam, at det blev bedre, skulde han løse Knuderne, en efter anden. Sagen havde været indstævnet for Præsterne, der havde kjendt, at det var Signen, Rasmus havde omgaaedes med, og havde skudt den fra sig til Laugtinget. Paa dette blev han dømt til at have sin Boeslod forbrudt, men efterdi han var en gammel, ulært Mand, som man aldrig havde hørt sligt om før, og han tilmed var fattig, aftingede han med 10 Gl.; Blasius blev dømt til at bøde 3 Gl.",
-      kommentarer:"Anklaget for \"Gjøgleri og Signen\""},
-    { id:2, sagsid:1, tid:1637, navn:"Blasius Joenssøn", sted:"Hestø",
-      kon:"Mand", forbrydelse:"Medvider i hemmelige kunster", dom:"Skyldig", udfald:"Bødestraf 3 GL",
-      kilde:"N. Andersen, Færøerne 1600-1709 (G.E.C. Gad, 1895): 455.",
-      ordlyd:"1637 var saaledes Rasmus Mogensen paa Nordredal tiltalt for nogen Gjøgleri eller Signen, som han skulde have brugt mod Blasius Joenssøn fra Hestø, der var syg. Rasmus havde raadet Blasius til, at han skulde koge sig en gulbenet Høne, da han mente, at det var den gule Sot,Blasius led af; derhos havde han givet ham et sort Baand med 3 Knuder paa,som han skulde binde om sig; naar han fornam,at det blev bedre, skulde han løseKnuderne, en efter anden. Sagen havde været indstævnet for Præsterne, der havde kjendt, at det var Signen, Rasmus havde omgaaedes med, og havde skudt den fra sig til Laugtinget. Paa dette blev han dømt til at have sin Boeslod forbrudt, men efterdi han var en gammel, ulært Mand, som man aldrig havde hørt sligt om før, og han tilmed var fattig, aftingede han med 10 Gl.; Blasius blev dømt til at bøde 3 Gl.",
-      kommentarer:null},
-    { id:3, sagsid:2, tid:1656, navn:"Poul Johannessøn \"Fange\"", sted:"Mygledal",
-      kon:"Mand", forbrydelse:"Gand", dom:"Unkown", udfald:"Unkown",
-      kilde:"N. Andersen, Færøerne 1600-1709 (G.E.C. Gad, 1895): 456.",
-      ordlyd:"\"1656 var Poul Johannessøn af Mygledal (Poul Fange) tiltalt for at have drevet Gand,dels ved Lønruner,dels ved Løsningsknuden, som han havde ladet læse i, og i Undersøgelsen mod ham vare blandt andre de endnu bekjendte Gandekarle, Ole Jakobsøn paa Ejde (Skaaledreng), Steffen Simonsøn paa Svinø og Daniel Jespersøn i Ørdevig indviklede.\" [Kilde: Museum 1893IIS.12ff.]",
-      kommentarer:null},
-    { id:8, sagsid:2, tid:1656, navn:"Ole Jakobsøn", sted:"Ejde",
-      kon:"Mand", forbrydelse:"Gand", dom:"Unknown", udfald:"Unknown",
-      kilde:"N. Andersen, Færøerne 1600-1709 (G.E.C. Gad, 1895): 456.",
-      ordlyd:"\"1656 var Poul Johannessøn af Mygledal (Poul Fange) tiltalt for at have drevet Gand,dels ved Lønruner,dels ved Løsningsknuden, som han havde ladet læse i, og i Undersøgelsen mod ham vare blandt andre de endnu bekjendte Gandekarle, Ole Jakobsøn paa Ejde (Skaaledreng), Steffen Simonsøn paa Svinø og Daniel Jespersøn i Ørdevig indviklede.\" [Kilde: Museum 1893IIS.12ff.]",
-      kommentarer:null},
-    { id:9, sagsid:2, tid:1656, navn:"Steffen Simonsøn", sted:"Svinø",
-      kon:"Mand", forbrydelse:"Gand", dom:"Unknown", udfald:"Unknown",
-      kilde:"N. Andersen, Færøerne 1600-1709 (G.E.C. Gad, 1895): 457.",
-      ordlyd:"\"1656 var Poul Johannessøn af Mygledal (Poul Fange) tiltalt for at have drevet Gand,dels ved Lønruner,dels ved Løsningsknuden, som han havde ladet læse i, og i Undersøgelsen mod ham vare blandt andre de endnu bekjendte Gandekarle, Ole Jakobsøn paa Ejde (Skaaledreng), Steffen Simonsøn paa Svinø og Daniel Jespersøn i Ørdevig indviklede.\" [Kilde: Museum 1893IIS.12ff.]",
-      kommentarer:null},
-    { id:10, sagsid:2, tid:1656, navn:"Daniel Jespersøn", sted:"Ørdevig",
-      kon:"Mand", forbrydelse:"Gand", dom:"Unknown", udfald:"Unknown",
-      kilde:"N. Andersen, Færøerne 1600-1709 (G.E.C. Gad, 1895): 458.",
-      ordlyd:"\"1656 var Poul Johannessøn af Mygledal (Poul Fange) tiltalt for at have drevet Gand,dels ved Lønruner,dels ved Løsningsknuden, som han havde ladet læse i, og i Undersøgelsen mod ham vare blandt andre de endnu bekjendte Gandekarle, Ole Jakobsøn paa Ejde (Skaaledreng), Steffen Simonsøn paa Svinø og Daniel Jespersøn i Ørdevig indviklede.\" [Kilde: Museum 1893IIS.12ff.]",
-      kommentarer:null},
-    { id:4, sagsid:3, tid:1667, navn:"Ahraham Isaksøn", sted:"Sumbø",
-      kon:"Mand", forbrydelse:"Trolddom", dom:"Unkown", udfald:"Unkown",
-      kilde:"N. Andersen, Færøerne 1600-1709 (G.E.C. Gad, 1895): 456.",
-      ordlyd:"1667 vare Ahraham Isaksøn og Søster,Barbara Isaksdatter, i Gaarden Kvier paa Sumbø tilligemed en Pige ved Navn Malene Holdansdatter under Undersøgelse for at have udøvet Trolddom mod nogle Folk der i Bygden, men uden at de kunde overbevises; Joen Joenssøn, der havde en daarlig Fod, paastod, at den skrev sig fra de Kvier Folk, og hver Gang han »delde« [deila, tvistes, skjændes] med dem, fik han altid ondt; en Kone i Langgaard, Katrine Joensdatter, paastod, at de havde lovet hende, at hun nok skulde komme til at sidde Enke, og det var ogsaa skeet.",
-      kommentarer:null},
-    { id:5, sagsid:4, tid:1667, navn:"Barbara Isdaksdatter", sted:"Sumbø",
-      kon:"Kvinde", forbrydelse:"Trolddom", dom:"Unkown", udfald:"Unkown",
-      kilde:"N. Andersen, Færøerne 1600-1709 (G.E.C. Gad, 1895): 456.",
-      ordlyd:"1667 vare Ahraham Isaksøn og Søster,Barbara Isaksdatter, i Gaarden Kvier paa Sumbø tilligemed en Pige ved Navn Malene Holdansdatter under Undersøgelse for at have udøvet Trolddom mod nogle Folk der i Bygden, men uden at de kunde overbevises; Joen Joenssøn, der havde en daarlig Fod, paastod, at den skrev sig fra de Kvier Folk, og hver Gang han »delde« [deila, tvistes, skjændes] med dem, fik han altid ondt; en Kone i Langgaard, Katrine Joensdatter, paastod, at de havde lovet hende, at hun nok skulde komme til at sidde Enke, og det var ogsaa skeet.",
-      kommentarer:null},
-    { id:6, sagsid:5, tid:1667, navn:"Malene Holdansdatter", sted:"Sumbø",
-      kon:"Kvinde", forbrydelse:"Trolddom", dom:"Unkown", udfald:"Unkown",
-      kilde:"N. Andersen, Færøerne 1600-1709 (G.E.C. Gad, 1895): 456.",
-      ordlyd:"1667 vare Ahraham Isaksøn og Søster,Barbara Isaksdatter, i Gaarden Kvier paa Sumbø tilligemed en Pige ved Navn Malene Holdansdatter under Undersøgelse for at have udøvet Trolddom mod nogle Folk der i Bygden, men uden at de kunde overbevises; Joen Joenssøn, der havde en daarlig Fod, paastod, at den skrev sig fra de Kvier Folk, og hver Gang han »delde« [deila, tvistes, skjændes] med dem, fik han altid ondt; en Kone i Langgaard, Katrine Joensdatter, paastod, at de havde lovet hende, at hun nok skulde komme til at sidde Enke, og det var ogsaa skeet.",
-      kommentarer:null},
-    { id:7, sagsid:6, tid:1720, navn:"Hr. Peder Arhebo", sted:"Skaale",
-      kon:"Mand", forbrydelse:"Hemmelige kunster", dom:"No trial", udfald:"No trial",
-      kilde:"N. Andersen, Færøerne 1600-1709 (G.E.C. Gad, 1895): 456-57.",
-      ordlyd:"1720 var man endnu ikke videre end, at Landfoged Didrik Marcussen da anmodede Hr. Peder Arhebo paa Vaagø om at komme over til Skaale paa Østerø for at hjælpe til at faa en Grind drevet ind og dræbt, »ifald han ved nogen Raad, at han ved Guds Hjælp kunde faa det Spøgeri fordrevet;« Befolkningen mente nemlig, at noget Spøgeri af Satan skal være der paa Sandet,som forhindrer Quallens Indløb.« [Amtstidende for Færøerne 1880 Nr.52.]",
-      kommentarer:"Ingen anklage eller sag. Hr. Peder Arhebo var præst."}
+    { id:1, sagsid:1, tid:1637, navn:"Rasmus Mogensen", land:"The Faroe Islands", bopael:"Nordredal", kon:"Mand", forbrydelse:"Hemmelige kunster", dom:"Skyldig", udfald:"Bødestraf 10 Gl.", kilde:"N. Andersen, Færøerne 1600-1709 (G.E.C. Gad, 1895): 455.", ordlyd:"\"1637 var saaledes Rasmus Mogensen paa Nordredal tiltalt for nogen Gjøgleri eller Signen, som han skulde have brugt mod Blasius Joenssøn fra Hestø, der var syg. Rasmus havde raadet Blasius til, at han skulde koge sig en gulbenet Høne, da han mente, at det var den gule Sot,Blasius led af; derhos havde han givet ham et sort Baand med 3 Knuder paa,som han skulde binde om sig; naarhanfornam,atdetblevbedre,skuldehanløseKnu derne, en efter anden. Sagen havde været indstævnet for Præsterne, der havde kjendt, at det var Signen, Rasmus havde omgaaedes med, og havde skudt den fra sig til Laugtinget. Paa dette blev han dømt til at have sin Boeslod forbrudt, men efterdi han var en gammel, ulært Mand, som man aldrig havde hørt sligt om før, og han tilmed var fattig, aftingede han med 10 Gl.; Blasius blev dømt til at bøde 3 Gl.\"", kommentarer:"Anklaget for \"Gjøgleri og Signen\""},
+    { id:2, sagsid:1, tid:1637, navn:"Blasius Joenssøn", land:"The Faroe Islands", bopael:"Hestø", kon:"Mand", forbrydelse:"Medvider (hemmelige kunster)", dom:"Skyldig", udfald:"Bødestraf 3 Gl.", kilde:"N. Andersen, Færøerne 1600-1709 (G.E.C. Gad, 1895): 455.", ordlyd:"\"1637 var saaledes Rasmus Mogensen paa Nordredal tiltalt for nogen Gjøgleri eller Signen, som han skulde have brugt mod Blasius Joenssøn fra Hestø, der var syg. Rasmus havde raadet Blasius til, at han skulde koge sig en gulbenet Høne, da han mente, at det var den gule Sot,Blasius led af; derhos havde han givet ham et sort Baand med 3 Knuder paa,som han skulde binde om sig; naar han fornam,atdetblevbedre,skuldehanløseKnu derne, en efter anden. Sagen havde været indstævnet for Præsterne, der havde kjendt, at det var Signen, Rasmus havde omgaaedes med, og havde skudt den fra sig til Laugtinget. Paa dette blev han dømt til at have sin Boeslod forbrudt, men efterdi han var en gammel, ulært Mand, som man aldrig havde hørt sligt om før, og han tilmed var fattig, aftingede han med 10 Gl.; Blasius blev dømt til at bøde 3 Gl.\"", kommentarer:null},
+    { id:3, sagsid:2, tid:1656, navn:"Poul Johannessøn \"Fange\"", land:"The Faroe Islands", bopael:"Mygledal", kon:"Mand", forbrydelse:"Gand", dom:"Unkown", udfald:"Unkown", kilde:"N. Andersen, Færøerne 1600-1709 (G.E.C. Gad, 1895): 456.", ordlyd:"\"1656 var Poul Johannessøn af Mygledal (Poul Fange) tiltaltfor at have drevet Gand,dels ved Lønruner,delsved Løsningsknuden, som han havde ladet læse i, og i Under søgelsen mod ham vare blandt andre de endnu bekjendte Gandekarle, Ole Jakobsøn paa Ejde (Skaaledreng), Steffen Simonsøn paa Svinø og Daniel Jespersøn i Ørdevig ind viklede.\" [Kilde: Museum 1893IIS.12ff.]", kommentarer:null},
+    { id:8, sagsid:2, tid:1656, navn:"Ole Jakobsøn", land:"The Faroe Islands", bopael:"Ejde", kon:"Mand", forbrydelse:"Gand", dom:"Unknown", udfald:"Unknown", kilde:"N. Andersen, Færøerne 1600-1709 (G.E.C. Gad, 1895): 456.", ordlyd:"\"1656 var Poul Johannessøn af Mygledal (Poul Fange) tiltaltfor at have drevet Gand,dels ved Lønruner,delsved Løsningsknuden, som han havde ladet læse i, og i Under søgelsen mod ham vare blandt andre de endnu bekjendte Gandekarle, Ole Jakobsøn paa Ejde (Skaaledreng), Steffen Simonsøn paa Svinø og Daniel Jespersøn i Ørdevig ind viklede.\" [Kilde: Museum 1893IIS.12ff.]", kommentarer:null},
+    { id:9, sagsid:2, tid:1656, navn:"Steffen Simonsøn", land:"The Faroe Islands", bopael:"Svinø", kon:"Mand", forbrydelse:"Gand", dom:"Unknown", udfald:"Unknown", kilde:"N. Andersen, Færøerne 1600-1709 (G.E.C. Gad, 1895): 457.", ordlyd:"\"1656 var Poul Johannessøn af Mygledal (Poul Fange) tiltaltfor at have drevet Gand,dels ved Lønruner,delsved Løsningsknuden, som han havde ladet læse i, og i Under søgelsen mod ham vare blandt andre de endnu bekjendte Gandekarle, Ole Jakobsøn paa Ejde (Skaaledreng), Steffen Simonsøn paa Svinø og Daniel Jespersøn i Ørdevig ind viklede.\" [Kilde: Museum 1893IIS.12ff.]", kommentarer:null},
+    { id:10, sagsid:2, tid:1656, navn:"Daniel Jespersøn", land:"The Faroe Islands", bopael:"Ørdevig", kon:"Mand", forbrydelse:"Gand", dom:"Unknown", udfald:"Unknown", kilde:"N. Andersen, Færøerne 1600-1709 (G.E.C. Gad, 1895): 458.", ordlyd:"\"1656 var Poul Johannessøn af Mygledal (Poul Fange) tiltaltfor at have drevet Gand,dels ved Lønruner,delsved Løsningsknuden, som han havde ladet læse i, og i Under søgelsen mod ham vare blandt andre de endnu bekjendte Gandekarle, Ole Jakobsøn paa Ejde (Skaaledreng), Steffen Simonsøn paa Svinø og Daniel Jespersøn i Ørdevig ind viklede.\" [Kilde: Museum 1893IIS.12ff.]", kommentarer:null},
+    { id:4, sagsid:3, tid:1667, navn:"Ahraham Isaksøn", land:"The Faroe Islands", bopael:"Sumbø", kon:"Mand", forbrydelse:"Trolddom", dom:"Unkown", udfald:"Unkown", kilde:"N. Andersen, Færøerne 1600-1709 (G.E.C. Gad, 1895): 456.", ordlyd:"\"1667 vare Ahraham Isaksøn og Søster,Barbara Isaksdatter, i Gaarden Kvier paa Sumbø tilligemed en Pige ved Navn Malene Holdansdatter under Undersøgelse for at have udøvet Trolddom mod nogle Folk der i Bygden, men uden at de kunde overbevises; Joen Joenssøn, der havde en daarlig Fod, paastod, at den skrev sig fra de Kvier Folk, og hver Gang han »delde« [deila, tvistes, skjændes] med dem, fik han altid ondt; en Kone i Langgaard, Katrine Joensdatter, paastod, at de havde lovet hende, at hun nok skulde komme til at sidde Enke, og det var ogsaa skeet.\"", kommentarer:null},
+    { id:5, sagsid:4, tid:1667, navn:"Barbara Isdaksdatter", land:"The Faroe Islands", bopael:"Sumbø", kon:"Kvinde", forbrydelse:"Trolddom", dom:"Unkown", udfald:"Unkown", kilde:"N. Andersen, Færøerne 1600-1709 (G.E.C. Gad, 1895): 456.", ordlyd:"\"1667 vare Ahraham Isaksøn og Søster,Barbara Isaksdatter, i Gaarden Kvier paa Sumbø tilligemed en Pige ved Navn Malene Holdansdatter under Undersøgelse for at have udøvet Trolddom mod nogle Folk der i Bygden, men uden at de kunde overbevises; Joen Joenssøn, der havde en daarlig Fod, paastod, at den skrev sig fra de Kvier Folk, og hver Gang han »delde« [deila, tvistes, skjændes] med dem, fik han altid ondt; en Kone i Langgaard, Katrine Joensdatter, paastod, at de havde lovet hende, at hun nok skulde komme til at sidde Enke, og det var ogsaa skeet.\"", kommentarer:null},
+    { id:6, sagsid:5, tid:1667, navn:"Malene Holdansdatter", land:"The Faroe Islands", bopael:"Sumbø", kon:"Kvinde", forbrydelse:"Trolddom", dom:"Unkown", udfald:"Unkown", kilde:"N. Andersen, Færøerne 1600-1709 (G.E.C. Gad, 1895): 456.", ordlyd:"\"1667 vare Ahraham Isaksøn og Søster,Barbara Isaksdatter, i Gaarden Kvier paa Sumbø tilligemed en Pige ved Navn Malene Holdansdatter under Undersøgelse for at have udøvet Trolddom mod nogle Folk der i Bygden, men uden at de kunde overbevises; Joen Joenssøn, der havde en daarlig Fod, paastod, at den skrev sig fra de Kvier Folk, og hver Gang han »delde« [deila, tvistes, skjændes] med dem, fik han altid ondt; en Kone i Langgaard, Katrine Joensdatter, paastod, at de havde lovet hende, at hun nok skulde komme til at sidde Enke, og det var ogsaa skeet.\"", kommentarer:null},
+    { id:7, sagsid:6, tid:1720, navn:"Hr. Peder Arhebo", land:"The Faroe Islands", bopael:"Skaale", kon:"Mand", forbrydelse:"Hemmelige kunster", dom:"No trial", udfald:"No trial", kilde:"N. Andersen, Færøerne 1600-1709 (G.E.C. Gad, 1895): 456-57.", ordlyd:"\"1720 var man endnu ikke videre end, at Landfoged Didrik Marcussen da anmodede Hr. Peder Arhebo paa Vaagø om at komme over til Skaale paa Østerø for at hjælpe til at faa en Grind drevet ind og dræbt, »ifald han ved nogen Raad, at han ved Guds Hjælp kunde faa det Spøgeri fordrevet;« Befolkningen mente nemlig, at noget Spøgeri af Satan skal være der paa Sandet,som forhindrer Quallens Indløb.« [Amtstidende for Færøerne 1880 Nr.52.]\"", kommentarer:"Ingen anklage eller sag. Hr. Peder Arhebo var præst."}
   ],
   danmark: [
     {id:"M1",tid:"1544",navn:"Gyde Spandemager",kon:"Kvinde",
@@ -14522,7 +14478,7 @@ function renderTable(rows, pfx) {
       <td class="td-year">${esc(x.tid)}</td>
       <td class="td-name">${x.navn ? esc(x.navn) : 'Unknown'}</td>
       <td class="td-place">${esc(tr(x.kon))}</td>
-      <td class="td-place">${esc(x.sted)}</td>
+      <td class="td-place">${esc(x.bopael || x.sted)}</td>
       <td>${(()=>{ const k=(x.forbrydelse||'').toLowerCase(); return GLOSSARY[k] ? `<span class="offence-term" onmouseenter="showGlossary(event,'${esc(x.forbrydelse)}')" onmouseleave="hideGlossary()">${esc(x.forbrydelse)}</span>` : esc(x.forbrydelse); })()}</td>
       <td class="td-place">${VERDICT_GLOSSARY[(x.dom||'').toLowerCase()] ? `<span class="offence-term" onmouseenter="showVerdictGlossary(event,'${esc(x.dom)}')" onmouseleave="hideGlossary()">${esc(tr(x.dom))}</span>` : esc(tr(x.dom))}</td>
       <td class="td-place">${VERDICT_GLOSSARY[(x.udfald||'').toLowerCase()] ? `<span class="offence-term" onmouseenter="showVerdictGlossary(event,'${esc(x.udfald)}')" onmouseleave="hideGlossary()">${esc(tr(x.udfald))}</span>` : esc(tr(x.udfald))}</td>
@@ -14717,7 +14673,7 @@ function renderTableSearch(rows) {
     if (x.ds === 'faeroerne') {
       detail = '<div class="det-grid-2">'
         + f('kon',         'Gender',   esc(tr(x.kon)))
-        + f('sted',        'Place',    esc(x.sted))
+        + f('bopael',      'Place',    esc(x.bopael))
         + f('dom',         'Verdict',  esc(tr(x.dom)))
         + f('kilde',       'Source',   esc(x.kilde))
         + f('kommentarer', 'Comments', esc(x.kommentarer))
@@ -15066,7 +15022,7 @@ function renderTableSh(rows, pfx) {
       <td class="td-year">${esc(x.tid)}</td>
       <td class="td-name">${x.navn ? esc(x.navn) : 'Unknown'}</td>
       <td class="td-place">${esc(tr(x.kon))}</td>
-      <td class="td-place">${esc(x.sted)}</td>
+      <td class="td-place">${esc(x.bopael || x.sted)}</td>
       <td class="td-place">${esc(x.region)}</td>
       <td class="td-place">${esc(x.land)}</td>
       <td class="td-place">${VERDICT_GLOSSARY[(x.udfald||'').toLowerCase()] ? `<span class="offence-term" onmouseenter="showVerdictGlossary(event,'${esc(x.udfald)}')" onmouseleave="hideGlossary()">${esc(tr(x.udfald))}</span>` : esc(tr(x.udfald))}</td>
@@ -15225,7 +15181,7 @@ const PAGES = {
       <div class="fig-grid">
         <div class="fig-block">
           <p class="fig-label">Gender</p>
-          <p class="fig-note">82% of accused were women, 18% men — based on 2,812 cases with recorded gender across Denmark, Norway, and Schleswig-Holstein.</p>
+          <p class="fig-note">82% of accused were women, 18% men — based on 2,822 cases with recorded gender across all four territories.</p>
           <div class="fig-bar-wrap">
             <div class="fig-bar" style="width:82%"><span>Women &nbsp;82%</span></div>
             <div class="fig-bar fig-bar-alt" style="width:18%"><span>Men &nbsp;18%</span></div>
@@ -15238,7 +15194,7 @@ const PAGES = {
             <div class="fig-bar" style="width:100%"><span>Denmark &nbsp;1,384</span></div>
             <div class="fig-bar" style="width:63%"><span>Schleswig-Holstein &nbsp;870</span></div>
             <div class="fig-bar" style="width:59%"><span>Norway &nbsp;820</span></div>
-            <div class="fig-bar" style="width:0.5%"><span style="color:var(--muted);margin-left:4px">Faroe Islands &nbsp;6</span></div>
+            <div class="fig-bar" style="width:1%"><span style="color:var(--muted);margin-left:4px">Faroe Islands &nbsp;10</span></div>
           </div>
         </div>
         <div class="fig-block">
@@ -15292,9 +15248,7 @@ const PAGES = {
     <h1 class="page-title">Numbers</h1>
     <span class="title-rule"></span>
     <p class="page-sub">Quantitative overview of witchcraft prosecutions in the Danish realm</p>
-    <div class="prose">
-      <p>This section will present a statistical breakdown of the trial records held in the GODWIT database, including the distribution of cases by region, decade, gender, and verdict. Content is being developed alongside the database.</p>
-    </div>`;
+    <div class="prose"></div>`;
   },
 
   ctx_geography() {
@@ -15312,9 +15266,7 @@ const PAGES = {
     <h1 class="page-title">Law</h1>
     <span class="title-rule"></span>
     <p class="page-sub">The legal framework governing witchcraft prosecutions, 1540&ndash;1720</p>
-    <div class="prose">
-      <p>Witchcraft was a capital offence across the Danish realm. The <em>Danske Lov</em> of 1683 and its regional equivalents codified the prosecution of sorcery, drawing on both canonical tradition and secular criminal law. This section will outline the key legislative instruments, court hierarchies, and evidentiary standards that shaped how trials were conducted across the different territories of the realm.</p>
-    </div>`;
+    <div class="prose"></div>`;
   },
 
   ctx_history() {
@@ -15322,10 +15274,7 @@ const PAGES = {
     <h1 class="page-title">General history</h1>
     <span class="title-rule"></span>
     <p class="page-sub">Historical background to the witch trials of the Danish realm</p>
-    <div class="prose">
-      <p>The ideal of the godly state developed during the 16th century. A part of being a godly Christian ruler included eradicating sin and all false Christians. Witches were the epitome of false Christians. The Danish State with its realms was ruled by the Oldenburg monarchs, encompassing the kingdoms of Denmark and Norway, present-day Iceland, and the duchies of Schleswig and Holstein.</p>
-      <p>These realms had separate jurisdictions and varying degrees of self-determination, but state authorities could issue strict laws against witchcraft. Common to these realms, lay rulers oversaw witch prosecutions. This section will provide a fuller narrative history of the witch trials as a social and political phenomenon within the realm.</p>
-    </div>`;
+    <div class="prose"></div>`;
   },
 
   about() {
