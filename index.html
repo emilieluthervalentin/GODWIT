@@ -90,6 +90,20 @@ a:hover { text-decoration: underline; }
 }
 .site-nav button:hover { color: var(--text); }
 .site-nav button.on { color: var(--text); border-bottom-color: var(--orange); }
+.site-nav button.search-btn {
+  margin-left: auto;
+  background: var(--orange);
+  color: var(--white);
+  border-bottom: none;
+  padding: .45rem 1.2rem;
+  align-self: center;
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 14px;
+  transition: background .15s;
+}
+.site-nav button.search-btn:hover { background: #a84d00; color: var(--white); }
+.site-nav button.search-btn.on { background: #a84d00; color: var(--white); border-bottom: none; }
 
 /* ══════════════════════════
    NAV DROPDOWN
@@ -204,9 +218,9 @@ a:hover { text-decoration: underline; }
 ══════════════════════════ */
 .ds-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px,1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 0; border: 1px solid var(--bdk);
-  max-width: 600px; margin-bottom: 2.25rem;
+  max-width: 760px; margin-bottom: 2.25rem;
 }
 .ds-card {
   padding: 1.25rem; border-right: 1px solid var(--bdk);
@@ -234,6 +248,57 @@ a:hover { text-decoration: underline; }
   font-family: 'Source Sans 3', sans-serif; padding: 0;
 }
 .arrow-link::before { content: '→'; color: var(--orange); }
+
+/* ══════════════════════════
+   FIGURES SECTION
+══════════════════════════ */
+.fig-section {
+  margin-top: 2rem; padding-top: 1.75rem;
+  border-top: 1px solid var(--border); margin-bottom: .5rem;
+}
+.fig-heading {
+  font-size: 11px; font-weight: 700; letter-spacing: .09em;
+  text-transform: uppercase; color: var(--muted); margin-bottom: .75rem;
+}
+.fig-caveat {
+  font-size: 14px; color: var(--muted); line-height: 1.7;
+  max-width: 680px; margin-bottom: 1.25rem;
+  padding-left: .85rem; border-left: 2px solid var(--border);
+}
+.fig-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.5rem 2.5rem;
+}
+.fig-block { display: flex; flex-direction: column; gap: .5rem; }
+.fig-label {
+  font-size: 15px; font-weight: 700; color: var(--text);
+}
+.fig-note { font-size: 13px; color: var(--muted); line-height: 1.6; }
+.fig-bar-wrap { display: flex; flex-direction: column; gap: 4px; margin-top: .35rem; }
+.fig-bar {
+  background: var(--orange); height: 22px; min-width: 2px;
+  display: flex; align-items: center;
+}
+.fig-bar span {
+  font-size: 11px; font-weight: 600; color: var(--white);
+  padding: 0 7px; white-space: nowrap;
+}
+.fig-bar-alt { background: #888; }
+.fig-timeline { margin-top: .35rem; }
+.fig-tl-bar {
+  height: 10px; width: 100%;
+  background: linear-gradient(to right, var(--light) 0%, var(--orange) 35%, var(--orange) 65%, var(--light) 100%);
+  border: 1px solid var(--border);
+}
+.fig-tl-labels {
+  display: flex; justify-content: space-between;
+  font-size: 11px; color: var(--muted); margin-top: 3px;
+}
+.fig-tl-note {
+  font-size: 11px; color: var(--orange); font-weight: 600;
+  margin-top: 5px;
+}
 
 /* ══════════════════════════
    FILTER BAR
@@ -305,6 +370,11 @@ tr:last-child > td { border-bottom: none; }
 tr.detail-row td { padding: 0; border-bottom: 1px solid var(--border); background: #fef3ea; }
 .detail-inner { padding: 1rem 1.1rem 1.25rem; }
 .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem 2rem; margin-bottom: .9rem; }
+.det-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem 2rem; }
+.sr-filter-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px,1fr)); gap: 10px 14px; margin-bottom: .5rem; }
+.sr-filter-cell { display: flex; flex-direction: column; gap: 4px; }
+.sr-filter-label { font-size: 11px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--muted); }
+.sr-filter-input { width: 100%; }
 .det-label { font-size: 11px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--muted); margin-bottom: 2px; }
 .det-val   { font-size: 15px; color: var(--text); }
 .ordlyd-block { padding-top: .85rem; border-top: 1px solid var(--border); }
@@ -472,7 +542,7 @@ tr.detail-row td { padding: 0; border-bottom: 1px solid var(--border); backgroun
     </div>
   </div>
 
-  <button id="btn-search" onclick="go('search',this)">Search all</button>
+  <button id="btn-search" class="search-btn" onclick="go('search',this)">Search all</button>
 </nav>
 
 <div class="breadcrumb" id="breadcrumb" style="display:none">
@@ -517,6 +587,26 @@ const GLOSSARY = {
   "trolddom":                    "Definition to be provided.",
   "spøgeri (?)":                 "Definition to be provided."
 };
+
+/* ═══════════════════════════════════════════════
+   VERDICT GLOSSARY — add definitions here
+═══════════════════════════════════════════════ */
+const VERDICT_GLOSSARY = {
+  "absolutio": "Definition to be provided."
+};
+
+function showVerdictGlossary(e, term) {
+  const def = VERDICT_GLOSSARY[term.toLowerCase()];
+  if (!def) return;
+  const tip = document.getElementById('glossary-tooltip');
+  tip.querySelector('.gloss-term').textContent = term;
+  tip.querySelector('.gloss-def').textContent = def;
+  const r = e.target.getBoundingClientRect();
+  const left = Math.min(r.left, window.innerWidth - 320);
+  tip.style.left = left + 'px';
+  tip.style.top  = (r.bottom + 6) + 'px';
+  tip.style.display = 'block';
+}
 
 function showGlossary(e, term) {
   const def = GLOSSARY[term.toLowerCase()];
@@ -14434,17 +14524,16 @@ function renderTable(rows, pfx) {
       <td class="td-place">${esc(tr(x.kon))}</td>
       <td class="td-place">${esc(x.sted)}</td>
       <td>${(()=>{ const k=(x.forbrydelse||'').toLowerCase(); return GLOSSARY[k] ? `<span class="offence-term" onmouseenter="showGlossary(event,'${esc(x.forbrydelse)}')" onmouseleave="hideGlossary()">${esc(x.forbrydelse)}</span>` : esc(x.forbrydelse); })()}</td>
-      <td class="td-place">${esc(tr(x.dom))}</td>
-      <td class="td-place">${esc(tr(x.udfald))}</td>
+      <td class="td-place">${VERDICT_GLOSSARY[(x.dom||'').toLowerCase()] ? `<span class="offence-term" onmouseenter="showVerdictGlossary(event,'${esc(x.dom)}')" onmouseleave="hideGlossary()">${esc(tr(x.dom))}</span>` : esc(tr(x.dom))}</td>
+      <td class="td-place">${VERDICT_GLOSSARY[(x.udfald||'').toLowerCase()] ? `<span class="offence-term" onmouseenter="showVerdictGlossary(event,'${esc(x.udfald)}')" onmouseleave="hideGlossary()">${esc(tr(x.udfald))}</span>` : esc(tr(x.udfald))}</td>
       <td class="td-toggle" id="arr_${u}">&#9658;</td>
     </tr>
     <tr class="detail-row" id="det_${u}" style="display:none"><td colspan="8">
-      <div class="detail-inner">
+            <div class="detail-inner">
         <div class="detail-grid">
-          <div><p class="det-label">Source</p><p class="det-val">${esc(x.kilde)}</p></div>
+          ${x.kilde ? `<div><p class="det-label">Source</p><p class="det-val">${esc(x.kilde)}</p></div>` : ''}
           ${x.kommentarer ? `<div><p class="det-label">Comments</p><p class="det-val">${esc(x.kommentarer)}</p></div>` : ''}
         </div>
-
       </div>
     </td></tr>`;
   }).join('');
@@ -14506,22 +14595,220 @@ function tog(u) {
 }
 
 /* ── Global search ── */
-function doSearch() {
-  const q = (document.getElementById('gq') || {value:''}).value.toLowerCase().trim();
+const DS_LABEL = { faeroerne: 'Faroe Islands', danmark: 'Denmark', norge: 'Norway', slesvig: 'Schleswig-Holstein' };
+let srSort = { col: null, dir: 'asc' };
+let srHits = [];
+
+function sortSr(col) {
+  srSort.dir = srSort.col === col && srSort.dir === 'asc' ? 'desc' : 'asc';
+  srSort.col = col;
   const res = document.getElementById('sr-results');
-  if (!q) { res.innerHTML = ''; return; }
-  const hits = [];
-  for (const [ds, rows] of Object.entries(DB))
-    for (const x of rows)
-      if ([x.tid,x.navn,x.sted,x.kon,x.forbrydelse,x.dom,x.udfald,x.kilde,x.ordlyd,x.kommentarer].filter(Boolean).join(' ').toLowerCase().includes(q))
-        hits.push({ ds, ...x });
-  if (hits.length) {
-    baseRows['sr'] = hits;
-    colFilters['sr'] = {};
-    res.innerHTML = `<p style="font-size:14px;color:var(--muted);margin-bottom:1rem">${hits.length} result${hits.length !== 1 ? 's' : ''}</p>` + renderTable(hits, 'sr');
-  } else {
-    res.innerHTML = '<p style="color:var(--muted)">No results found.</p>';
+  if (res && srHits.length) {
+    res.innerHTML = renderTableSearch(srHits);
+    Object.entries(srColFilters).forEach(([c, v]) => {
+      const el = document.getElementById('sr-fi-' + c);
+      if (el) el.value = v;
+    });
   }
+}
+
+function clearSearchFilters() {
+  srColFilters = {};
+  const gs = document.getElementById('sr-global');
+  if (gs) gs.value = '';
+  ['sr-fi-tid','sr-fi-navn','sr-fi-country','sr-fi-forbrydelse','sr-fi-dom','sr-fi-udfald'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  srHits = [];
+  const res = document.getElementById('sr-results');
+  const countEl = document.getElementById('sr-count');
+  if (res) res.innerHTML = '';
+  if (countEl) countEl.textContent = '';
+}
+
+let srColFilters = {};
+
+function onSrGlobal() {
+  srColFilters = {};
+  ['sr-fi-tid','sr-fi-navn','sr-fi-country','sr-fi-forbrydelse','sr-fi-dom','sr-fi-udfald'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.value = '';
+  });
+  doSearch(null);
+}
+
+function onSrColFilter(col) {
+  const gs = document.getElementById('sr-global'); if (gs) gs.value = '';
+  srColFilters = {};
+  ['tid','navn','country','forbrydelse','dom','udfald'].forEach(c => {
+    const el = document.getElementById('sr-fi-' + c);
+    if (el && el.value.trim()) srColFilters[c] = el.value.trim().toLowerCase();
+  });
+  doSearch(col);
+}
+
+function doSearch(activeCol) {
+  const res = document.getElementById('sr-results');
+  const countEl = document.getElementById('sr-count');
+  if (!res) return;
+
+  const gs = (document.getElementById('sr-global') || {value:''}).value.toLowerCase().trim();
+  const hasCol = Object.keys(srColFilters).length > 0;
+  if (!gs && !hasCol) { res.innerHTML = ''; if (countEl) countEl.textContent = ''; return; }
+
+  const hits = [];
+  for (const [ds, rows] of Object.entries(DB)) {
+    const label = DS_LABEL[ds] || ds;
+    const labelL = label.toLowerCase();
+    for (const x of rows) {
+      if (gs) {
+        const text = [x.tid, x.navn, tr(x.kon), label, x.sted, x.bopael,
+          x.land, x.region, x.forbrydelse, tr(x.dom), tr(x.udfald),
+          x.kilde, x.kommentarer, x.ekstra
+        ].map(v => String(v ?? '')).join(' ').toLowerCase();
+        if (!text.includes(gs)) continue;
+      } else {
+        const f = srColFilters;
+        if (f.tid         && !String(x.tid ?? '').toLowerCase().includes(f.tid)) continue;
+        if (f.navn        && !String(x.navn ?? '').toLowerCase().includes(f.navn)) continue;
+        if (f.country     && !labelL.includes(f.country)) continue;
+        if (f.forbrydelse && !String(x.forbrydelse ?? '').toLowerCase().includes(f.forbrydelse)) continue;
+        if (f.dom         && !tr(String(x.dom ?? '')).toLowerCase().includes(f.dom)) continue;
+        if (f.udfald      && !tr(String(x.udfald ?? '')).toLowerCase().includes(f.udfald)) continue;
+      }
+      hits.push({ ds, ...x });
+    }
+  }
+
+  srHits = hits;
+  if (countEl) countEl.textContent = hits.length ? hits.length + ' result' + (hits.length !== 1 ? 's' : '') : '';
+  res.innerHTML = hits.length ? renderTableSearch(hits) : '<p style="color:var(--muted)">No results found.</p>';
+
+  Object.entries(srColFilters).forEach(([c, v]) => {
+    const el = document.getElementById('sr-fi-' + c); if (el) el.value = v;
+  });
+  if (activeCol) {
+    const active = document.getElementById('sr-fi-' + activeCol);
+    if (active) { active.focus(); active.setSelectionRange(9999, 9999); }
+  }
+}
+
+function renderTableSearch(rows) {
+  rows = rows || [];
+  if (!rows.length) return '<p style="color:var(--muted);font-size:15px">No results found.</p>';
+  srHits = rows;
+  if (srSort.col) {
+    rows = [...rows].sort((a, b) => {
+      const colMap = { tid: 'tid', navn: 'navn', country: null, forbrydelse: 'forbrydelse', dom: 'dom', udfald: 'udfald' };
+      const field = colMap[srSort.col];
+      let av = field ? tr(String(a[field] ?? '')) : DS_LABEL[a.ds] || a.ds;
+      let bv = field ? tr(String(b[field] ?? '')) : DS_LABEL[b.ds] || b.ds;
+      if (srSort.col === 'tid') { av = +(a.tid ?? 0); bv = +(b.tid ?? 0); }
+      else { av = av.toLowerCase(); bv = bv.toLowerCase(); }
+      return av < bv ? (srSort.dir === 'asc' ? -1 : 1) : av > bv ? (srSort.dir === 'asc' ? 1 : -1) : 0;
+    });
+  }
+  const r = rows.map((x, i) => {
+    const u = 'sr_' + i;
+    const offence = x.forbrydelse || null;
+    const outcome = x.udfald || null;
+    const f = (field, label, val) => x[field] ? `<div><p class="det-label">${label}</p><p class="det-val">${val}</p></div>` : '';
+    let detail = '';
+    if (x.ds === 'faeroerne') {
+      detail = '<div class="det-grid-2">'
+        + f('kon',         'Gender',   esc(tr(x.kon)))
+        + f('sted',        'Place',    esc(x.sted))
+        + f('dom',         'Verdict',  esc(tr(x.dom)))
+        + f('kilde',       'Source',   esc(x.kilde))
+        + f('kommentarer', 'Comments', esc(x.kommentarer))
+        + '</div>';
+    } else if (x.ds === 'danmark') {
+      detail = '<div class="det-grid-2">'
+        + f('kon',         'Gender',    esc(tr(x.kon)))
+        + f('bopael',      'Place',     esc(x.bopael))
+        + f('land',        'Region',    esc(x.land))
+        + f('sagstype',    'Case type', esc(tr(x.sagstype)))
+        + f('kilde',       'Source',    esc(x.kilde))
+        + f('kommentarer', 'Comments',  esc(x.kommentarer))
+        + f('ekstra',      'Extra info',esc(x.ekstra))
+        + '</div>';
+    } else if (x.ds === 'norge') {
+      detail = '<div class="det-grid-2">'
+        + f('kon',    'Gender',              esc(tr(x.kon)))
+        + f('bopael', 'Place',               esc(x.bopael))
+        + f('land',   'Region',              esc(x.land))
+        + f('kilde',  'Source',              esc(x.kilde))
+        + f('ekstra', 'Further information', esc(x.ekstra))
+        + '</div>';
+    } else if (x.ds === 'slesvig') {
+      const linkHtml = x.links ? `<a href="${esc(x.links)}" target="_blank">${esc(x.links)}</a>` : '';
+      detail = '<div class="det-grid-2">'
+        + f('kon',         'Gender',        esc(tr(x.kon)))
+        + f('sted',        'Place',         esc(x.sted))
+        + f('region',      'Area',          esc(x.region))
+        + f('land',        'Territory',     esc(x.land))
+        + f('kilde',       'Source',        esc(x.kilde))
+        + f('kommentarer', 'Comments',      esc(x.kommentarer))
+        + (x.links ? `<div><p class="det-label">Archival link</p><p class="det-val">${linkHtml}</p></div>` : '')
+        + '</div>';
+    }
+    return `<tr class="data-row" id="row_${u}" onclick="tog('${u}')">
+      <td class="td-year">${esc(x.tid)}</td>
+      <td class="td-name">${x.navn ? esc(x.navn) : 'Unknown'}</td>
+      <td>${esc(DS_LABEL[x.ds] || x.ds)}</td>
+      <td>${offence ? (GLOSSARY[offence.toLowerCase()] ? `<span class="offence-term" onmouseenter="showGlossary(event,'${esc(offence)}')" onmouseleave="hideGlossary()">${esc(offence)}</span>` : esc(offence)) : '<span style="color:var(--muted)">&#8212;</span>'}</td>
+      <td>${x.dom ? (VERDICT_GLOSSARY[(x.dom||'').toLowerCase()] ? `<span class="offence-term" onmouseenter="showVerdictGlossary(event,'${esc(x.dom)}')" onmouseleave="hideGlossary()">${esc(tr(x.dom))}</span>` : esc(tr(x.dom))) : '<span style="color:var(--muted)">&#8212;</span>'}</td>
+      <td>${outcome ? esc(tr(outcome)) : '<span style="color:var(--muted)">&#8212;</span>'}</td>
+      <td class="td-toggle" id="arr_${u}">&#9658;</td>
+    </tr>
+    <tr class="detail-row" id="det_${u}" style="display:none"><td colspan="7">
+      <div class="detail-inner">${detail}</div>
+    </td></tr>`;
+  }).join('');
+  return `<div class="table-wrap"><table>
+    <thead>
+      <tr>
+        <th style="width:55px"  class="sortable ${srSort.col==='tid'         ? (srSort.dir==='asc' ? 'sort-asc' : 'sort-desc') : ''}" onclick="sortSr('tid')">Year</th>
+        <th style="width:180px" class="sortable ${srSort.col==='navn'        ? (srSort.dir==='asc' ? 'sort-asc' : 'sort-desc') : ''}" onclick="sortSr('navn')">Name</th>
+        <th style="width:150px" class="sortable ${srSort.col==='country'     ? (srSort.dir==='asc' ? 'sort-asc' : 'sort-desc') : ''}" onclick="sortSr('country')">Country</th>
+        <th class="sortable ${srSort.col==='forbrydelse' ? (srSort.dir==='asc' ? 'sort-asc' : 'sort-desc') : ''}" onclick="sortSr('forbrydelse')">Offence</th>
+        <th style="width:130px" class="sortable ${srSort.col==='dom'         ? (srSort.dir==='asc' ? 'sort-asc' : 'sort-desc') : ''}" onclick="sortSr('dom')">Verdict</th>
+        <th style="width:160px" class="sortable ${srSort.col==='udfald'      ? (srSort.dir==='asc' ? 'sort-asc' : 'sort-desc') : ''}" onclick="sortSr('udfald')">Outcome</th>
+        <th style="width:28px"></th>
+      </tr>
+      <tr class="filter-row">
+        <th><input class="col-filter" type="search" id="sr-fi-tid"         placeholder="Year&hellip;"    oninput="onSrColFilter('tid')"></th>
+        <th><input class="col-filter" type="search" id="sr-fi-navn"        placeholder="Name&hellip;"    oninput="onSrColFilter('navn')"></th>
+        <th><input class="col-filter" type="search" id="sr-fi-country"     placeholder="Country&hellip;" oninput="onSrColFilter('country')"></th>
+        <th><input class="col-filter" type="search" id="sr-fi-forbrydelse" placeholder="Offence&hellip;" oninput="onSrColFilter('forbrydelse')"></th>
+        <th><input class="col-filter" type="search" id="sr-fi-dom"         placeholder="Verdict&hellip;" oninput="onSrColFilter('dom')"></th>
+        <th><input class="col-filter" type="search" id="sr-fi-udfald"      placeholder="Outcome&hellip;" oninput="onSrColFilter('udfald')"></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>${r}</tbody>
+  </table></div>`;
+}
+
+
+/* ── Global dataset search (per-dataset search box) ── */
+function onGlobalSearch(pfx) {
+  const q = (document.getElementById('gs-' + pfx) || {value:''}).value.toLowerCase().trim();
+  colFilters[pfx] = {};
+  ['tid','navn','kon','bopael','land','sted','forbrydelse','dom','udfald','region'].forEach(c => {
+    const el = document.getElementById('fi-' + pfx + '-' + c);
+    if (el) el.value = '';
+  });
+  const dbMap = { fe: 'faeroerne', dk: 'danmark', no: 'norge', sh: 'slesvig' };
+  const dbKey = dbMap[pfx] || pfx;
+  const all = DB[dbKey] || [];
+  const rows = q ? all.filter(x => Object.values(x).filter(Boolean).join(' ').toLowerCase().includes(q)) : all;
+  baseRows[pfx] = rows;
+  const renderers = { fe: renderTable, dk: renderTableDk, no: renderTableNo, sh: renderTableSh };
+  const fn = renderers[pfx] || renderTable;
+  document.getElementById(containerOf[pfx]).innerHTML = fn(rows, pfx);
+  const countEl = document.getElementById(countElOf[pfx]);
+  if (countEl) countEl.textContent = rows.length + (rows.length === 1 ? ' case' : ' cases');
 }
 
 /* ── Dropdown menus ── */
@@ -14619,15 +14906,15 @@ function renderTableDk(rows, pfx) {
       <td class="td-place">${esc(x.bopael)}</td>
       <td class="td-place">${esc(x.land)}</td>
       <td>${offenceCell}</td>
-      <td class="td-place">${esc(tr(x.dom))}</td>
+      <td class="td-place">${VERDICT_GLOSSARY[(x.dom||'').toLowerCase()] ? `<span class="offence-term" onmouseenter="showVerdictGlossary(event,'${esc(x.dom)}')" onmouseleave="hideGlossary()">${esc(tr(x.dom))}</span>` : esc(tr(x.dom))}</td>
       <td class="td-toggle" id="arr_${u}">&#9658;</td>
     </tr>
     <tr class="detail-row" id="det_${u}" style="display:none"><td colspan="8">
-      <div class="detail-inner">
+            <div class="detail-inner">
         <div class="detail-grid">
-          <div><p class="det-label">Case type</p><p class="det-val">${esc(tr(x.sagstype))}</p></div>
-          <div><p class="det-label">Outcome</p><p class="det-val">${esc(x.udfald)}</p></div>
-          <div><p class="det-label">Source</p><p class="det-val">${esc(x.kilde)}</p></div>
+          ${x.sagstype ? `<div><p class="det-label">Case type</p><p class="det-val">${esc(tr(x.sagstype))}</p></div>` : ''}
+          ${x.udfald ? `<div><p class="det-label">Outcome</p><p class="det-val">${esc(x.udfald)}</p></div>` : ''}
+          ${x.kilde ? `<div><p class="det-label">Source</p><p class="det-val">${esc(x.kilde)}</p></div>` : ''}
           ${x.kommentarer ? `<div><p class="det-label">Comments</p><p class="det-val">${esc(x.kommentarer)}</p></div>` : ''}
           ${x.ekstra ? `<div><p class="det-label">Extra information</p><p class="det-val">${esc(x.ekstra)}</p></div>` : ''}
         </div>
@@ -14702,14 +14989,14 @@ function renderTableNo(rows, pfx) {
       <td class="td-place">${esc(x.bopael)}</td>
       <td class="td-place">${esc(x.land)}</td>
       <td>${offenceCell}</td>
-      <td class="td-place">${esc(tr(x.udfald))}</td>
+      <td class="td-place">${VERDICT_GLOSSARY[(x.udfald||'').toLowerCase()] ? `<span class="offence-term" onmouseenter="showVerdictGlossary(event,'${esc(x.udfald)}')" onmouseleave="hideGlossary()">${esc(tr(x.udfald))}</span>` : esc(tr(x.udfald))}</td>
       <td class="td-toggle" id="arr_${u}">&#9658;</td>
     </tr>
     <tr class="detail-row" id="det_${u}" style="display:none"><td colspan="8">
-      <div class="detail-inner">
+            <div class="detail-inner">
         <div class="detail-grid">
-          <div><p class="det-label">Verdict</p><p class="det-val">${esc(tr(x.dom))}</p></div>
-          <div><p class="det-label">Source</p><p class="det-val">${esc(x.kilde)}</p></div>
+          ${x.dom ? `<div><p class="det-label">Verdict</p><p class="det-val">${esc(tr(x.dom))}</p></div>` : ''}
+          ${x.kilde ? `<div><p class="det-label">Source</p><p class="det-val">${esc(x.kilde)}</p></div>` : ''}
           ${x.ekstra ? `<div><p class="det-label">Further information</p><p class="det-val">${esc(x.ekstra)}</p></div>` : ''}
         </div>
       </div>
@@ -14782,13 +15069,13 @@ function renderTableSh(rows, pfx) {
       <td class="td-place">${esc(x.sted)}</td>
       <td class="td-place">${esc(x.region)}</td>
       <td class="td-place">${esc(x.land)}</td>
-      <td class="td-place">${esc(tr(x.udfald))}</td>
+      <td class="td-place">${VERDICT_GLOSSARY[(x.udfald||'').toLowerCase()] ? `<span class="offence-term" onmouseenter="showVerdictGlossary(event,'${esc(x.udfald)}')" onmouseleave="hideGlossary()">${esc(tr(x.udfald))}</span>` : esc(tr(x.udfald))}</td>
       <td class="td-toggle" id="arr_${u}">&#9658;</td>
     </tr>
     <tr class="detail-row" id="det_${u}" style="display:none"><td colspan="8">
-      <div class="detail-inner">
+            <div class="detail-inner">
         <div class="detail-grid">
-          <div><p class="det-label">Source</p><p class="det-val">${esc(x.kilde)}</p></div>
+          ${x.kilde ? `<div><p class="det-label">Source</p><p class="det-val">${esc(x.kilde)}</p></div>` : ''}
           ${x.kommentarer ? `<div><p class="det-label">Comments</p><p class="det-val">${esc(x.kommentarer)}</p></div>` : ''}
           ${x.links ? `<div><p class="det-label">Archival link</p><p class="det-val"><a href="${esc(x.links)}" target="_blank">${esc(x.links)}</a></p></div>` : ''}
         </div>
@@ -14898,33 +15185,75 @@ const PAGES = {
 
   overview() {
     const n = DB.faeroerne.length;
+    const total = DB.faeroerne.length + DB.danmark.length + DB.norge.length + DB.slesvig.length;
     return `<p class="section-label">Database</p>
     <h1 class="page-title">Witchcraft Database of the Danish Realm</h1>
     <span class="title-rule"></span>
-    <p class="page-sub">A systematic collection of witchcraft trial records from the Danish realm, 1540&ndash;1720</p>
+    <p class="page-sub">A systematic collection of witchcraft trial records from the Danish realm, 1530&ndash;1720</p>
     <div class="stat-row">
-      <div class="stat"><span class="stat-n">${n}</span><span class="stat-l">cases online</span></div>
-      <div class="stat"><span class="stat-n">1637&ndash;1720</span><span class="stat-l">period covered</span></div>
-      <div class="stat"><span class="stat-n">${DB.faeroerne.length + DB.danmark.length + DB.norge.length + DB.slesvig.length}</span><span class="stat-l">total cases</span></div>
+      <div class="stat"><span class="stat-n">${total.toLocaleString()}</span><span class="stat-l">known cases</span></div>
+      <div class="stat"><span class="stat-n">1530&ndash;1720</span><span class="stat-l">period covered</span></div>
+      <div class="stat"><span class="stat-n">82%</span><span class="stat-l">female accused</span></div>
+      <div class="stat"><span class="stat-n">4</span><span class="stat-l">territories</span></div>
     </div>
     <div class="ds-grid">
-      <div class="ds-card" onclick="go('faeroerne')">
-        <p class="ds-name">Faroe Islands</p><p class="ds-years">c. 1637&ndash;1720</p>
-        <p class="ds-count">${n}</p><p class="ds-count-l">cases</p>
-        <span class="ds-cta">Browse dataset</span>
-      </div>
-      <div class="ds-card locked">
-        <p class="ds-name">Malm&oslash;</p><p class="ds-years">c. 1590&ndash;1710</p>
-        <p class="ds-count" style="color:var(--muted)">&mdash;</p><p class="ds-count-l">in development</p>
-        <span class="ds-soon">Coming soon</span>
-      </div>
       <div class="ds-card" onclick="go('danmark')">
         <p class="ds-name">Denmark</p><p class="ds-years">c. 1544&ndash;1720</p>
         <p class="ds-count">${DB.danmark.length}</p><p class="ds-count-l">cases</p>
         <span class="ds-cta">Browse dataset</span>
       </div>
+      <div class="ds-card" onclick="go('norge')">
+        <p class="ds-name">Norway</p><p class="ds-years">c. 1539&ndash;1754</p>
+        <p class="ds-count">${DB.norge.length}</p><p class="ds-count-l">cases</p>
+        <span class="ds-cta">Browse dataset</span>
+      </div>
+      <div class="ds-card" onclick="go('slesvig')">
+        <p class="ds-name">Schleswig-Holstein</p><p class="ds-years">c. 1530&ndash;1735</p>
+        <p class="ds-count">${DB.slesvig.length}</p><p class="ds-count-l">cases</p>
+        <span class="ds-cta">Browse dataset</span>
+      </div>
+      <div class="ds-card" onclick="go('faeroerne')">
+        <p class="ds-name">Faroe Islands</p><p class="ds-years">c. 1637&ndash;1720</p>
+        <p class="ds-count">${n}</p><p class="ds-count-l">cases</p>
+        <span class="ds-cta">Browse dataset</span>
+      </div>
     </div>
     <p class="intro-block">The GODWIT database is a systematic collection of witchcraft trial records from across the Danish realm during the early modern period. The project is led by Professor Louise Nyholm Kallestrup at the University of Southern Denmark and covers legal sources from Denmark, Norway, Iceland, the Faroe Islands, and Scania.</p>
+    <div class="fig-section">
+      <p class="fig-heading">What the database can illustrate</p>
+      <p class="fig-caveat">The figures below reflect only the cases documented in surviving sources. They do not represent the full extent of witchcraft prosecutions across the Danish realm — an unknown number of trials went unrecorded or have been lost. All statistics should be read as indicative of patterns in the <em>known</em> record, not as a complete historical account.</p>
+      <div class="fig-grid">
+        <div class="fig-block">
+          <p class="fig-label">Gender</p>
+          <p class="fig-note">82% of accused were women, 18% men — based on 2,812 cases with recorded gender across Denmark, Norway, and Schleswig-Holstein.</p>
+          <div class="fig-bar-wrap">
+            <div class="fig-bar" style="width:82%"><span>Women &nbsp;82%</span></div>
+            <div class="fig-bar fig-bar-alt" style="width:18%"><span>Men &nbsp;18%</span></div>
+          </div>
+        </div>
+        <div class="fig-block">
+          <p class="fig-label">By territory</p>
+          <p class="fig-note">Cases are unevenly distributed across the realm, reflecting both population size and the intensity of prosecutions.</p>
+          <div class="fig-bar-wrap">
+            <div class="fig-bar" style="width:100%"><span>Denmark &nbsp;1,384</span></div>
+            <div class="fig-bar" style="width:63%"><span>Schleswig-Holstein &nbsp;870</span></div>
+            <div class="fig-bar" style="width:59%"><span>Norway &nbsp;820</span></div>
+            <div class="fig-bar" style="width:0.5%"><span style="color:var(--muted);margin-left:4px">Faroe Islands &nbsp;6</span></div>
+          </div>
+        </div>
+        <div class="fig-block">
+          <p class="fig-label">Time period</p>
+          <p class="fig-note">Records span nearly two centuries, from the earliest documented prosecutions c. 1530 through the waning of large-scale trials after 1700.</p>
+          <div class="fig-timeline">
+            <div class="fig-tl-bar"></div>
+            <div class="fig-tl-labels">
+              <span>1530</span><span>1580</span><span>1630</span><span>1680</span><span>1720</span>
+            </div>
+            <div class="fig-tl-note">Peak intensity: c. 1610&ndash;1660</div>
+          </div>
+        </div>
+      </div>
+    </div>
     <button class="arrow-link" onclick="go('search',document.getElementById('btn-search'))">Search the database</button>`;
   },
 
@@ -14947,10 +15276,13 @@ const PAGES = {
     return `<p class="section-label">Search</p>
     <h1 class="page-title">Search all datasets</h1>
     <span class="title-rule"></span>
-    <p class="page-sub">Searches across all available datasets</p>
-    <div class="search-wrap">
-      <input type="search" id="gq" placeholder="Name, place, year, offence, source text&hellip;" oninput="doSearch()">
-      <p class="search-hint">Search covers name, place, year, offence, and the full verbatim source text</p>
+    <p class="page-sub">Search across all datasets, or use the column filters below</p>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;">
+      <input class="global-search" type="search" id="sr-global" placeholder="Search all datasets&hellip;" oninput="onSrGlobal()" style="width:320px">
+      <div style="display:flex;align-items:center;gap:1.25rem;">
+        <span id="sr-count" style="font-size:14px;color:var(--muted)"></span>
+        <button onclick="clearSearchFilters()" style="font-size:13px;color:var(--muted);background:none;border:none;cursor:pointer;padding:0;font-family:inherit">Clear all</button>
+      </div>
     </div>
     <div id="sr-results"></div>`;
   },
