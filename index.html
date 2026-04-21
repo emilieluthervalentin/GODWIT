@@ -104,6 +104,15 @@ a:hover { text-decoration: underline; }
 }
 .site-nav button.search-btn:hover { background: #a84d00; color: var(--white); }
 .site-nav button.search-btn.on { background: #a84d00; color: var(--white); border-bottom: none; }
+.lang-btn {
+  background: none; border: 1px solid var(--border);
+  padding: .3rem .65rem; font-family: 'Source Sans 3', sans-serif;
+  font-size: 13px; font-weight: 700; cursor: pointer;
+  color: var(--muted); align-self: center; margin-left: .5rem;
+  transition: background .15s, color .15s;
+  letter-spacing: .04em;
+}
+.lang-btn:hover { background: var(--light); color: var(--text); }
 
 /* ══════════════════════════
    NAV DROPDOWN
@@ -163,6 +172,34 @@ a:hover { text-decoration: underline; }
 .nav-dd-badge.live {
   background: var(--orange-lt); color: var(--orange);
 }
+
+/* ══════════════════════════
+   FLYOUT SUBMENU
+══════════════════════════ */
+.nav-dd-item.has-flyout { position: relative; border-bottom: none; }
+.nav-dd-item.has-flyout::after { content: '›'; margin-left: auto; padding-left: 10px; color: var(--muted); font-size: 13px; }
+.nav-flyout {
+  display: none;
+  position: fixed;
+  background: var(--white);
+  border: 1px solid var(--bdk);
+  border-top: 2px solid var(--orange);
+  min-width: 190px;
+  z-index: 1001;
+  box-shadow: 0 4px 12px rgba(0,0,0,.12);
+}
+.nav-dd-item.has-flyout:hover { background: var(--orange-lt); }
+.nav-dd-item.has-flyout:hover .nav-flyout { display: block; }
+.nav-flyout button {
+  display: block; width: 100%; text-align: left;
+  padding: .65rem 1rem;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 14px; font-weight: 400;
+  background: none; border: none;
+  cursor: pointer; color: var(--text);
+  transition: background .12s;
+}
+.nav-flyout button:hover { background: var(--orange-lt); }
 
 /* ══════════════════════════
    LAYOUT
@@ -489,11 +526,32 @@ tr.detail-row td { padding: 0; border-bottom: 1px solid var(--border); backgroun
 .footer-stripe { background: var(--orange); padding: .9rem 2.5rem; display: flex; align-items: center; }
 .footer-stripe-text { font-size: 15px; font-weight: 600; color: var(--white); }
 .site-footer { background: var(--footer-bg); padding: 2rem 2.5rem; }
-.footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap: 1.5rem 2rem; }
+.footer-grid { display: flex; justify-content: space-between; align-items: center; gap: 1.5rem 2rem; flex-wrap: wrap; }
 .footer-col-head { font-size: 15px; font-weight: 700; color: var(--white); margin-bottom: .6rem; padding-bottom: .4rem; border-bottom: 1px solid #444; }
 .footer-col p  { font-size: 13px; color: #999; line-height: 1.7; }
 .footer-col a  { color: #999; text-decoration: none; display: block; font-size: 13px; line-height: 1.8; }
 .footer-col a:hover { color: var(--white); }
+.logo-bar {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.logo-bar img {
+  height: 36px;
+  width: auto;
+  opacity: 1;
+  transition: opacity .15s;
+  border: none;
+  background: none;
+}
+.logo-bar img:hover { opacity: 1; }
+.logo-bar img.logo-dff {
+  filter: brightness(0) invert(1);
+  opacity: .75;
+}
+.logo-bar img.logo-dff:hover { opacity: 1; }
 
 /* ══════════════════════════
    RESPONSIVE
@@ -504,6 +562,113 @@ tr.detail-row td { padding: 0; border-bottom: 1px solid var(--border); backgroun
   .site-nav, .footer-stripe, .site-footer { padding-left: 1rem; padding-right: 1rem; }
   .site-content { padding: 1.5rem 1rem; }
   .detail-grid { grid-template-columns: 1fr; }
+}
+
+/* ══════════════════════════
+   COUNTRY MULTI-SELECT FILTER
+══════════════════════════ */
+.sr-country-wrap { position: relative; width: 100%; }
+.sr-country-btn {
+  background: var(--white); border: 1px solid var(--border);
+  padding: .25rem .45rem; font-size: 12px; cursor: pointer;
+  width: 100%; text-align: left; display: flex;
+  justify-content: space-between; align-items: center;
+  font-family: 'Source Sans 3', sans-serif; color: var(--text);
+  white-space: nowrap; overflow: hidden; max-width: 100%;
+  border-radius: 0; box-sizing: border-box;
+}
+.sr-country-btn:focus { outline: none; border-color: var(--orange); }
+.sr-country-dd {
+  position: absolute; top: 100%; left: 0;
+  background: #fff; border: 1px solid var(--border);
+  box-shadow: 0 4px 14px rgba(0,0,0,.13);
+  z-index: 200; min-width: 190px; padding: .3rem 0;
+  border-radius: 2px;
+}
+.sr-country-dd label {
+  display: flex; align-items: center; gap: .55rem;
+  padding: .35rem .85rem; cursor: pointer;
+  font-size: 13px; white-space: nowrap; color: var(--text);
+}
+.sr-country-dd label:hover { background: var(--light); }
+.sr-country-dd input[type=checkbox] { cursor: pointer; accent-color: var(--orange); }
+
+/* ══════════════════════════
+   YEAR RANGE FILTER
+══════════════════════════ */
+.sr-year-wrap { position: relative; width: 100%; }
+.sr-year-btn {
+  background: none; border: 1px solid var(--bdk);
+  padding: .3rem .5rem; font-size: 12px; cursor: pointer;
+  width: 100%; text-align: left; display: flex;
+  justify-content: space-between; align-items: center;
+  font-family: inherit; color: var(--muted);
+  white-space: nowrap;
+}
+.sr-year-btn:focus { outline: none; border-color: var(--orange); }
+.sr-year-dd {
+  position: absolute; top: 100%; left: 50%;
+  transform: translateX(-50%);
+  background: #fff; border: 1px solid var(--border);
+  box-shadow: 0 4px 14px rgba(0,0,0,.13);
+  z-index: 200; width: 220px; padding: .75rem 1rem .9rem;
+  border-radius: 2px;
+}
+.yr-labels {
+  display: flex; justify-content: space-between;
+  font-size: 13px; font-weight: 600; color: var(--text);
+  margin-bottom: .55rem;
+}
+.yr-track-wrap {
+  position: relative; height: 22px; margin-bottom: .1rem;
+}
+.yr-track-bg {
+  position: absolute; top: 50%; left: 0; right: 0;
+  height: 4px; background: var(--light);
+  border-radius: 2px; transform: translateY(-50%);
+}
+.yr-track-fill {
+  position: absolute; top: 50%; height: 4px;
+  background: var(--orange); border-radius: 2px;
+  transform: translateY(-50%); pointer-events: none;
+}
+.yr-track-wrap input[type=range] {
+  position: absolute; width: 100%; height: 100%;
+  -webkit-appearance: none; appearance: none;
+  background: transparent; pointer-events: none;
+  outline: none; margin: 0; padding: 0;
+}
+.yr-track-wrap input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--orange); border: 2px solid #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,.25);
+  cursor: pointer; pointer-events: all;
+}
+.yr-track-wrap input[type=range]::-moz-range-thumb {
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--orange); border: 2px solid #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,.25);
+  cursor: pointer; pointer-events: all; border: 2px solid #fff;
+}
+.yr-track-wrap input[type=range]::-webkit-slider-runnable-track { background: transparent; }
+.yr-track-wrap input[type=range]::-moz-range-track { background: transparent; }
+
+/* ══════════════════════════
+   SEARCH YEAR BAR
+══════════════════════════ */
+.sr-year-bar {
+  display: flex; align-items: center; gap: .75rem;
+  margin-bottom: 1rem;
+}
+.sr-year-bar-lbl {
+  font-size: 12px; color: var(--muted); font-weight: 600;
+  min-width: 32px; text-align: center;
+}
+/* Country dropdown uses fixed position set by JS */
+.sr-country-dd {
+  position: fixed;
+  z-index: 500;
 }
 </style>
 </head>
@@ -519,22 +684,43 @@ tr.detail-row td { padding: 0; border-bottom: 1px solid var(--border); backgroun
 </div>
 
 <nav class="site-nav" id="top-nav">
-  <button class="on" id="btn-overview" onclick="go('overview',this)">Frontpage</button>
-  <button id="btn-about" onclick="go('about',this)">About GODWIT</button>
+  <button class="on" id="btn-overview" onclick="go('overview',this)" data-i18n="nav_frontpage">Frontpage</button>
+  <div class="nav-dd" id="dd-about" onmouseenter="ddEnter('dd-about','btn-about')" onmouseleave="ddLeave()">
+    <button class="nav-dd-btn" id="btn-about" onclick="toggleDdAbout(event)" data-i18n="nav_about">
+      About GODWIT
+    </button>
+    <div class="nav-dd-menu" onmouseenter="ddCancelClose()" onmouseleave="ddLeave()">
+      <button class="nav-dd-item" onclick="go('about_project')">Research project</button>
+      <button class="nav-dd-item" onclick="go('about_employees')">Employees</button>
+      <button class="nav-dd-item" onclick="go('about_contact')">Contact</button>
+    </div>
+  </div>
   <div class="nav-dd" id="dd-context" onmouseenter="ddEnter('dd-context','btn-context')" onmouseleave="ddLeave()">
-    <button class="nav-dd-btn" id="btn-context" onclick="toggleDd2(event)">
+    <button class="nav-dd-btn" id="btn-context" onclick="toggleDd2(event)" data-i18n="nav_context">
       Context
     </button>
     <div class="nav-dd-menu" id="dd-context-menu" onmouseenter="ddCancelClose()" onmouseleave="ddLeave()">
-      <button class="nav-dd-item" onclick="go('ctx_numbers')">
+      <div class="nav-dd-item has-flyout" id="flyout-numbers-wrap">
         Numbers
-      </button>
+        <div class="nav-flyout" id="flyout-numbers">
+          <button onclick="go('ctx_numbers_dk')">Denmark</button>
+          <button onclick="go('ctx_numbers_no')">Norway</button>
+          <button onclick="go('ctx_numbers_sh')">Schleswig-Holstein</button>
+          <button onclick="go('ctx_numbers_fe')">Faroe Islands</button>
+        </div>
+      </div>
       <button class="nav-dd-item" onclick="go('ctx_geography')">
         Geography
       </button>
-      <button class="nav-dd-item" onclick="go('ctx_law')">
+      <div class="nav-dd-item has-flyout" id="flyout-law-wrap">
         Law
-      </button>
+        <div class="nav-flyout" id="flyout-law">
+          <button onclick="go('ctx_law_dk')">Denmark</button>
+          <button onclick="go('ctx_law_no')">Norway</button>
+          <button onclick="go('ctx_law_sh')">Schleswig-Holstein</button>
+          <button onclick="go('ctx_law_fe')">Faroe Islands</button>
+        </div>
+      </div>
       <button class="nav-dd-item" onclick="go('ctx_history')">
         General history
       </button>
@@ -542,7 +728,7 @@ tr.detail-row td { padding: 0; border-bottom: 1px solid var(--border); backgroun
   </div>
 
   <div class="nav-dd" id="dd-datasets" onmouseenter="ddEnter('dd-datasets','btn-datasets')" onmouseleave="ddLeave()">
-    <button class="nav-dd-btn" id="btn-datasets" onclick="toggleDd(event)">
+    <button class="nav-dd-btn" id="btn-datasets" onclick="toggleDd(event)" data-i18n="nav_datasets">
       Datasets
     </button>
     <div class="nav-dd-menu" onmouseenter="ddCancelClose()" onmouseleave="ddLeave()">
@@ -560,7 +746,8 @@ tr.detail-row td { padding: 0; border-bottom: 1px solid var(--border); backgroun
     </div>
   </div>
 
-  <button id="btn-search" class="search-btn" onclick="go('search',this)">Search all</button>
+  <button id="btn-search" class="search-btn" onclick="go('search',this)" data-i18n="nav_search">Search all</button>
+  <button id="btn-lang" class="lang-btn" onclick="setLang(currentLang==='en'?'da':'en')">DA</button>
 </nav>
 
 <div class="breadcrumb" id="breadcrumb" style="display:none">
@@ -580,6 +767,9 @@ tr.detail-row td { padding: 0; border-bottom: 1px solid var(--border); backgroun
       <p class="footer-col-head">Contact</p>
       <a href="mailto:GODWIT@sdu.dk">GODWIT@sdu.dk</a>
       <p style="margin-top:.25rem">University of Southern Denmark</p>
+    </div>
+    <div class="logo-bar">
+        <img src="https://raw.githubusercontent.com/emilieluthervalentin/GODWIT/main/SDU_WHITE_RGB-png.png" alt="University of Southern Denmark">
     </div>
   </div>
 </footer>
@@ -637,6 +827,270 @@ function hideGlossary() {
 /* ═══════════════════════════════════════════════
    COLUMN TRANSLATIONS — add new values as needed
 ═══════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════
+   INTERNATIONALISATION
+═══════════════════════════════════════════════ */
+let currentLang = 'en';
+let currentPage = 'overview';
+
+const STRINGS = {
+  en: {
+    nav_frontpage:'Frontpage', nav_about:'About GODWIT', nav_research:'Research project',
+    nav_employees:'Employees', nav_contact:'Contact', nav_context:'Context',
+    nav_numbers:'Numbers', nav_geography:'Geography', nav_law:'Law',
+    nav_history:'General history', nav_datasets:'Datasets', nav_search:'Search all',
+    nav_iceland:'Iceland', nav_fe:'Faroe Islands', nav_dk:'Denmark',
+    nav_no:'Norway', nav_sh:'Schleswig-Holstein',
+    sec_database:'Database', sec_dataset:'Dataset', sec_context:'Context',
+    sec_about:'About the project', sec_search:'Search', sec_ctx_numbers:'Context › Numbers',
+    sec_ctx_law:'Context › Law', sec_about_godwit:'About GODWIT',
+    title_frontpage:'Witchcraft Database of the Danish Realm',
+    title_fe:'Faroe Islands', title_dk:'Denmark', title_no:'Norway', title_sh:'Schleswig-Holstein',
+    title_numbers:'Numbers', title_geography:'Geography', title_law:'Law',
+    title_history:'General history', title_about:'About GODWIT',
+    title_research:'Research project', title_employees:'Employees', title_contact:'Contact',
+    title_search:'Search all datasets',
+    title_numbers_dk:'Numbers — Denmark', title_numbers_no:'Numbers — Norway',
+    title_numbers_sh:'Numbers — Schleswig-Holstein', title_numbers_fe:'Numbers — Faroe Islands',
+    title_law_dk:'Law — Denmark', title_law_no:'Law — Norway',
+    title_law_sh:'Law — Schleswig-Holstein', title_law_fe:'Law — Faroe Islands',
+    sub_frontpage:'A systematic collection of witchcraft trial records from the Danish realm, 1530–1720',
+    sub_dataset:'Witchcraft trial records — click column headers to sort, type in filters to search by column, click a row to read details',
+    sub_fe:'Witchcraft trial records — click column headers to sort, type in filters to search by column, click a row to read the source text',
+    sub_numbers:'Quantitative overview of witchcraft prosecutions in the Danish realm',
+    sub_geography:'Spatial distribution of witchcraft trials across the Danish realm',
+    sub_law:'The legal framework governing witchcraft prosecutions, 1540–1720',
+    sub_history:'Historical background to the witch trials of the Danish realm',
+    sub_about:'Godly Power and Witchcraft in the Danish Realm',
+    sub_research:'Godly Power and Witchcraft in the Danish Realm',
+    sub_employees:'The GODWIT research team',
+    sub_contact:'Get in touch with the project',
+    sub_search:'Search across all datasets, or use the column filters below',
+    sub_numbers_dk:'Quantitative overview of witchcraft prosecutions in Denmark',
+    sub_numbers_no:'Quantitative overview of witchcraft prosecutions in Norway',
+    sub_numbers_sh:'Quantitative overview of witchcraft prosecutions in Schleswig-Holstein',
+    sub_numbers_fe:'Quantitative overview of witchcraft prosecutions in the Faroe Islands',
+    sub_law_dk:'The legal framework governing witchcraft prosecutions in Denmark, 1540–1720',
+    sub_law_no:'The legal framework governing witchcraft prosecutions in Norway, 1540–1720',
+    sub_law_sh:'The legal framework governing witchcraft prosecutions in Schleswig-Holstein, 1530–1735',
+    sub_law_fe:'The legal framework governing witchcraft prosecutions in the Faroe Islands, 1637–1720',
+    stat_cases:'known cases', stat_period:'period covered', stat_female:'female accused', stat_territories:'territories',
+    card_cases:'cases', card_browse:'Browse dataset', card_dev:'in development', card_soon:'Coming soon',
+    intro_text:'The GODWIT database is a systematic collection of witchcraft trial records from across the Danish realm during the early modern period. The project is led by Professor Louise Nyholm Kallestrup at the University of Southern Denmark and covers legal sources from Denmark, Norway, Iceland, the Faroe Islands, and Scania.',
+    btn_search_db:'Search the database',
+    fig_heading:'What the database can illustrate',
+    fig_caveat:'The figures below reflect only the cases documented in surviving sources. They do not represent the full extent of witchcraft prosecutions across the Danish realm — an unknown number of trials went unrecorded or have been lost. All statistics should be read as indicative of patterns in the <em>known</em> record, not as a complete historical account.',
+    fig_gender:'Gender', fig_gender_note:'82% of accused were women, 18% men — based on 2,822 cases with recorded gender across all four territories.',
+    fig_women:'Women', fig_men:'Men',
+    fig_territory:'By territory', fig_territory_note:'Cases are unevenly distributed across the realm, reflecting both population size and the intensity of prosecutions.',
+    fig_time:'Time period', fig_time_note:'Records span nearly two centuries, from the earliest documented prosecutions c. 1530 through the waning of large-scale trials after 1700.',
+    fig_peak:'Peak intensity: c. 1610–1660',
+    col_year:'Year', col_name:'Name', col_gender:'Gender', col_place:'Place',
+    col_region:'Region', col_offence:'Offence', col_verdict:'Verdict', col_outcome:'Outcome',
+    col_country:'Country', col_area:'Area', col_territory:'Territory',
+    col_source:'Source', col_comments:'Comments', col_casetype:'Case type',
+    col_extra:'Extra information', col_further:'Further information', col_archival:'Archival link',
+    ph_year:'Year…', ph_name:'Name…', ph_gender:'Gender', ph_place:'Place…',
+    ph_region:'Region…', ph_offence:'Offence…', ph_verdict:'Verdict…',
+    ph_outcome:'Outcome…', ph_country:'Country', ph_area:'Area…',
+    ph_territory:'Territory…', ph_search_ds:'Search dataset…', ph_search_all:'Search all datasets…',
+    lbl_clear:'Clear all', lbl_no_results:'No results found.',
+    contact_text:'For enquiries about the GODWIT database, please contact the project at',
+    contact_dept:'Department of History', contact_uni:'University of Southern Denmark',
+    lbl_cases_s:' case', lbl_cases_p:' cases', lbl_results_s:' result', lbl_results_p:' results',
+    ordlyd_label:'Source text', ordlyd_lang:'Source language: Danish',
+    lbl_unknown:'Unknown', lbl_search_hint:'Search all datasets…',
+    bc_sep:' › ',
+    breadcrumb_overview:'Frontpage',
+    breadcrumb_fe:'Datasets › Faroe Islands',
+    breadcrumb_dk:'Datasets › Denmark',
+    breadcrumb_no:'Datasets › Norway',
+    breadcrumb_sh:'Datasets › Schleswig-Holstein',
+    breadcrumb_search:'Search all',
+    breadcrumb_ctx_numbers:'Context › Numbers',
+    breadcrumb_ctx_geography:'Context › Geography',
+    breadcrumb_ctx_law:'Context › Law',
+    breadcrumb_ctx_history:'Context › General history',
+    breadcrumb_about:'About GODWIT',
+    breadcrumb_about_project:'About GODWIT › Research project',
+    breadcrumb_about_employees:'About GODWIT › Employees',
+    breadcrumb_about_contact:'About GODWIT › Contact',
+    breadcrumb_ctx_numbers_dk:'Context › Numbers › Denmark',
+    breadcrumb_ctx_numbers_no:'Context › Numbers › Norway',
+    breadcrumb_ctx_numbers_sh:'Context › Numbers › Schleswig-Holstein',
+    breadcrumb_ctx_numbers_fe:'Context › Numbers › Faroe Islands',
+    breadcrumb_ctx_law_dk:'Context › Law › Denmark',
+    breadcrumb_ctx_law_no:'Context › Law › Norway',
+    breadcrumb_ctx_law_sh:'Context › Law › Schleswig-Holstein',
+    breadcrumb_ctx_law_fe:'Context › Law › Faroe Islands',
+  },
+  da: {
+    nav_frontpage:'Forside', nav_about:'Om GODWIT', nav_research:'Forskningsprojektet',
+    nav_employees:'Medarbejdere', nav_contact:'Kontakt', nav_context:'Kontekst',
+    nav_numbers:'Tal', nav_geography:'Geografi', nav_law:'Lovgivning',
+    nav_history:'Generel historie', nav_datasets:'Datasæt', nav_search:'Søg i alle',
+    nav_iceland:'Island', nav_fe:'Færøerne', nav_dk:'Danmark',
+    nav_no:'Norge', nav_sh:'Slesvig-Holsten',
+    sec_database:'Database', sec_dataset:'Datasæt', sec_context:'Kontekst',
+    sec_about:'Om projektet', sec_search:'Søg', sec_ctx_numbers:'Kontekst › Tal',
+    sec_ctx_law:'Kontekst › Lovgivning', sec_about_godwit:'Om GODWIT',
+    title_frontpage:'Trolddomsdatabasen for det danske rige',
+    title_fe:'Færøerne', title_dk:'Danmark', title_no:'Norge', title_sh:'Slesvig-Holsten',
+    title_numbers:'Tal', title_geography:'Geografi', title_law:'Lovgivning',
+    title_history:'Generel historie', title_about:'Om GODWIT',
+    title_research:'Forskningsprojektet', title_employees:'Medarbejdere', title_contact:'Kontakt',
+    title_search:'Søg i alle datasæt',
+    title_numbers_dk:'Tal — Danmark', title_numbers_no:'Tal — Norge',
+    title_numbers_sh:'Tal — Slesvig-Holsten', title_numbers_fe:'Tal — Færøerne',
+    title_law_dk:'Lovgivning — Danmark', title_law_no:'Lovgivning — Norge',
+    title_law_sh:'Lovgivning — Slesvig-Holsten', title_law_fe:'Lovgivning — Færøerne',
+    sub_frontpage:'En systematisk samling af trolddomssager fra det danske rige, 1530–1720',
+    sub_dataset:'Trolddomssager — klik på kolonneoverskrifter for at sortere, skriv i filtre for at søge, klik på en række for at læse detaljer',
+    sub_fe:'Trolddomssager — klik på kolonneoverskrifter for at sortere, skriv i filtre for at søge, klik på en række for at læse kildeteksten',
+    sub_numbers:'Kvantitativ oversigt over trolddomsforfølgelser i det danske rige',
+    sub_geography:'Geografisk fordeling af trolddomssager i det danske rige',
+    sub_law:'Den retslige ramme for trolddomsforfølgelser, 1540–1720',
+    sub_history:'Historisk baggrund for hekseprocesserne i det danske rige',
+    sub_about:'Gudfrygtig magt og trolddom i det danske rige',
+    sub_research:'Gudfrygtig magt og trolddom i det danske rige',
+    sub_employees:'GODWIT-forskningsholdet',
+    sub_contact:'Kontakt projektet',
+    sub_search:'Søg på tværs af alle datasæt, eller brug kolonnefiltrene nedenfor',
+    sub_numbers_dk:'Kvantitativ oversigt over trolddomsforfølgelser i Danmark',
+    sub_numbers_no:'Kvantitativ oversigt over trolddomsforfølgelser i Norge',
+    sub_numbers_sh:'Kvantitativ oversigt over trolddomsforfølgelser i Slesvig-Holsten',
+    sub_numbers_fe:'Kvantitativ oversigt over trolddomsforfølgelser på Færøerne',
+    sub_law_dk:'Den retslige ramme for trolddomsforfølgelser i Danmark, 1540–1720',
+    sub_law_no:'Den retslige ramme for trolddomsforfølgelser i Norge, 1540–1720',
+    sub_law_sh:'Den retslige ramme for trolddomsforfølgelser i Slesvig-Holsten, 1530–1735',
+    sub_law_fe:'Den retslige ramme for trolddomsforfølgelser på Færøerne, 1637–1720',
+    stat_cases:'kendte sager', stat_period:'periode', stat_female:'kvindelige anklagede', stat_territories:'territorier',
+    card_cases:'sager', card_browse:'Gennemse datasæt', card_dev:'under udvikling', card_soon:'Kommer snart',
+    intro_text:'GODWIT-databasen er en systematisk samling af trolddomssager fra det danske rige i den tidlige moderne periode. Projektet ledes af professor Louise Nyholm Kallestrup ved Syddansk Universitet og omfatter retskilder fra Danmark, Norge, Island, Færøerne og Skånelandene.',
+    btn_search_db:'Søg i databasen',
+    fig_heading:'Hvad databasen kan illustrere',
+    fig_caveat:'Tallene nedenfor afspejler kun de sager, der er dokumenteret i bevarede kilder. De repræsenterer ikke det fulde omfang af trolddomsforfølgelser i det danske rige — et ukendt antal retssager er aldrig blevet registreret eller er gået tabt. Al statistik bør læses som indikativ for mønstre i det <em>kendte</em> kildemateriale, ikke som en fuldstendig historisk redegorelse.',
+    fig_gender:'Køn', fig_gender_note:'82% af de anklagede var kvinder, 18% mænd — baseret på 2.822 sager med registreret køn fra alle fire territorier.',
+    fig_women:'Kvinder', fig_men:'Mænd',
+    fig_territory:'Pr. territorium', fig_territory_note:'Sagerne er ulige fordelt på tværs af riget, hvilket afspejler både befolkningsstørrelse og intensiteten af forfølgelserne.',
+    fig_time:'Tidsperiode', fig_time_note:'Kilderne spænder over næsten to århundreder, fra de tidligste dokumenterede forfølgelser ca. 1530 til aftagende storskalaforfølgelser efter 1700.',
+    fig_peak:'Højdepunkt: ca. 1610–1660',
+    col_year:'År', col_name:'Navn', col_gender:'Køn', col_place:'Sted',
+    col_region:'Region', col_offence:'Forbrydelse', col_verdict:'Dom', col_outcome:'Udfald',
+    col_country:'Land', col_area:'Område', col_territory:'Territorium',
+    col_source:'Kilde', col_comments:'Kommentarer', col_casetype:'Sagstype',
+    col_extra:'Ekstra information', col_further:'Yderligere information', col_archival:'Arkivlink',
+    ph_year:'År…', ph_name:'Navn…', ph_gender:'Køn', ph_place:'Sted…',
+    ph_region:'Region…', ph_offence:'Forbrydelse…', ph_verdict:'Dom…',
+    ph_outcome:'Udfald…', ph_country:'Land', ph_area:'Område…',
+    ph_territory:'Territorium…', ph_search_ds:'Søg i datasæt…', ph_search_all:'Søg i alle datasæt…',
+    lbl_clear:'Ryd alt', lbl_no_results:'Ingen resultater fundet.',
+    contact_text:'For henvendelser om GODWIT-databasen bedes du kontakte projektet på',
+    contact_dept:'Institut for Historie', contact_uni:'Syddansk Universitet',
+    lbl_cases_s:' sag', lbl_cases_p:' sager', lbl_results_s:' resultat', lbl_results_p:' resultater',
+    ordlyd_label:'Kildetekst', ordlyd_lang:'Kildesprog: Dansk',
+    lbl_unknown:'Ukendt', lbl_search_hint:'Søg i alle datasæt…',
+    bc_sep:' › ',
+    breadcrumb_overview:'Forside',
+    breadcrumb_fe:'Datasæt › Færøerne',
+    breadcrumb_dk:'Datasæt › Danmark',
+    breadcrumb_no:'Datasæt › Norge',
+    breadcrumb_sh:'Datasæt › Slesvig-Holsten',
+    breadcrumb_search:'Søg i alle',
+    breadcrumb_ctx_numbers:'Kontekst › Tal',
+    breadcrumb_ctx_geography:'Kontekst › Geografi',
+    breadcrumb_ctx_law:'Kontekst › Lovgivning',
+    breadcrumb_ctx_history:'Kontekst › Generel historie',
+    breadcrumb_about:'Om GODWIT',
+    breadcrumb_about_project:'Om GODWIT › Forskningsprojektet',
+    breadcrumb_about_employees:'Om GODWIT › Medarbejdere',
+    breadcrumb_about_contact:'Om GODWIT › Kontakt',
+    breadcrumb_ctx_numbers_dk:'Kontekst › Tal › Danmark',
+    breadcrumb_ctx_numbers_no:'Kontekst › Tal › Norge',
+    breadcrumb_ctx_numbers_sh:'Kontekst › Tal › Slesvig-Holsten',
+    breadcrumb_ctx_numbers_fe:'Kontekst › Tal › Færøerne',
+    breadcrumb_ctx_law_dk:'Kontekst › Lovgivning › Danmark',
+    breadcrumb_ctx_law_no:'Kontekst › Lovgivning › Norge',
+    breadcrumb_ctx_law_sh:'Kontekst › Lovgivning › Slesvig-Holsten',
+    breadcrumb_ctx_law_fe:'Kontekst › Lovgivning › Færøerne',
+  }
+};
+function t(k) { return (STRINGS[currentLang] && STRINGS[currentLang][k] !== undefined) ? STRINGS[currentLang][k] : (STRINGS.en[k] || k); }
+function t_cases(n) { return n + (n === 1 ? t('lbl_cases_s') : t('lbl_cases_p')); }
+function t_results(n) { return n + (n !== 1 ? t('lbl_results_p') : t('lbl_results_s')); }
+
+function updateNavText() {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const k = el.getAttribute('data-i18n');
+    // For buttons that may have child elements, update text node only
+    const nodes = [...el.childNodes].filter(n => n.nodeType === 3);
+    if (nodes.length) nodes[0].textContent = ' ' + t(k) + ' ';
+    else el.textContent = t(k);
+  });
+  // Dropdown menu items without IDs — update by order
+  const ctxMenu = document.getElementById('dd-context-menu');
+  if (ctxMenu) {
+    const items = ctxMenu.querySelectorAll('.nav-dd-item, .nav-flyout button');
+    // Context menu: Numbers, Geography, Law, General history (flyout labels inside .has-flyout are text nodes)
+    const ctxKeys = ['nav_numbers','nav_geography','nav_law','nav_history'];
+    const topItems = ctxMenu.querySelectorAll(':scope > .nav-dd-item, :scope > button');
+    topItems.forEach((el, i) => {
+      if (ctxKeys[i]) {
+        const tn = [...el.childNodes].filter(n => n.nodeType === 3 && n.textContent.trim());
+        if (tn.length) tn[0].textContent = t(ctxKeys[i]);
+      }
+    });
+    // Flyout sub-items for numbers and law
+    ['flyout-numbers','flyout-law'].forEach(fid => {
+      const fl = document.getElementById(fid);
+      if (!fl) return;
+      const btns = fl.querySelectorAll('button');
+      const terr = ['nav_dk','nav_no','nav_sh','nav_fe'];
+      btns.forEach((b, i) => { if (terr[i]) b.textContent = t(terr[i]); });
+    });
+  }
+  // About menu items
+  const aboutMenu = document.querySelector('#dd-about .nav-dd-menu');
+  if (aboutMenu) {
+    const aboutKeys = ['nav_research','nav_employees','nav_contact'];
+    aboutMenu.querySelectorAll('.nav-dd-item').forEach((el, i) => {
+      if (aboutKeys[i]) el.textContent = t(aboutKeys[i]);
+    });
+  }
+  // Datasets menu items
+  const dsMenu = document.querySelector('#dd-datasets .nav-dd-menu');
+  if (dsMenu) {
+    const dsItems = dsMenu.querySelectorAll('.nav-dd-item');
+    const dsKeys = ['nav_fe','nav_dk','nav_no','nav_sh','nav_iceland'];
+    dsItems.forEach((el, i) => {
+      if (dsKeys[i]) {
+        const tn = [...el.childNodes].filter(n => n.nodeType === 3 && n.textContent.trim());
+        if (tn.length) tn[0].textContent = t(dsKeys[i]);
+        else el.textContent = t(dsKeys[i]);
+      }
+    });
+  }
+  // Lang toggle button label
+  const lb = document.getElementById('btn-lang');
+  if (lb) lb.textContent = currentLang === 'en' ? 'DA' : 'EN';
+}
+
+function setLang(l) {
+  currentLang = l;
+  updateNavText();
+  if (currentPage) {
+    const main = document.getElementById('site-main');
+    if (main && PAGES[currentPage]) main.innerHTML = PAGES[currentPage]();
+  }
+  // Restore filter values after re-render (search page)
+  if (currentPage === 'search') {
+    Object.entries(srColFilters).forEach(([col, v]) => {
+      const el = document.getElementById('sr-fi-' + col); if (el) el.value = v;
+    });
+  }
+}
+
+
 const TRANS = {
   // Gender
   'mand':    'Male',
@@ -14412,14 +14866,21 @@ const countElOf   = { fe: 'fe-n', dk: 'dk-n', no: 'no-n', sh: 'sh-n' };
 function getFilteredRows(pfx) {
   const base = baseRows[pfx] || [];
   const f = colFilters[pfx] || {};
-  if (!Object.keys(f).length) return base;
+  const yearActive = dsYearFilter.min !== dsYearBounds.min || dsYearFilter.max !== dsYearBounds.max;
+  const genderSel = dsGenderFilter[pfx] || new Set();
   const transCols = ['kon','dom','udfald'];
-  return base.filter(x =>
-    Object.entries(f).every(([col, q]) => {
+  return base.filter(x => {
+    if (genderSel.size > 0 && !genderSel.has(x.kon)) return false;
+    if (yearActive) {
+      const yr = +(String(x.tid ?? '').match(/\d{4}/)?.[0] ?? 0);
+      if (yr === 0 || yr < dsYearFilter.min || yr > dsYearFilter.max) return false;
+    }
+    if (!Object.keys(f).length) return true;
+    return Object.entries(f).every(([col, q]) => {
       const raw = transCols.includes(col) ? tr(x[col] ?? '') : String(x[col] ?? '');
       return raw.toLowerCase().includes(q);
-    })
-  );
+    });
+  });
 }
 
 function onColFilter(pfx, col) {
@@ -14444,7 +14905,7 @@ function onColFilter(pfx, col) {
 
   // Update case count
   const countEl = document.getElementById(countElOf[pfx]);
-  if (countEl) countEl.textContent = rows.length + (rows.length === 1 ? ' case' : ' cases');
+  if (countEl) countEl.textContent = t_cases(rows.length);
 }
 
 /* ── Sorting ── */
@@ -14453,7 +14914,7 @@ function applySort(rows, pfx) {
   if (!s) return rows;
   return [...rows].sort((a, b) => {
     let av = a[s.col] ?? '', bv = b[s.col] ?? '';
-    if (s.col === 'tid') { av = +av; bv = +bv; }
+    if (s.col === 'tid') { av = +(String(a.tid ?? '').match(/\d{4}/)?.[0] ?? 0); bv = +(String(b.tid ?? '').match(/\d{4}/)?.[0] ?? 0); }
     else { av = String(av).toLowerCase(); bv = String(bv).toLowerCase(); }
     return av < bv ? (s.dir==='asc'?-1:1) : av > bv ? (s.dir==='asc'?1:-1) : 0;
   });
@@ -14478,19 +14939,19 @@ function sortAndRender(pfx, col) {
     if (el) el.value = v;
   });
   const countEl = document.getElementById(countElOf[pfx]);
-  if (countEl) countEl.textContent = rows.length + (rows.length === 1 ? ' case' : ' cases');
+  if (countEl) countEl.textContent = t_cases(rows.length);
 }
 
 /* ── Table renderer ── */
 function renderTable(rows, pfx) {
   openRowId = null;
-  if (!rows.length) return '<p style="color:var(--muted);font-size:15px;padding:.5rem 0">No results found.</p>';
+  if (!rows.length) return '<p style="color:var(--muted);font-size:15px;padding:.5rem 0">' + t('lbl_no_results') + '</p>';
   const sorted = applySort(rows, pfx);
   const r = sorted.map((x, i) => {
     const u = pfx + '_' + i;
     return `<tr class="data-row" id="row_${u}" onclick="tog('${u}')">
       <td class="td-year">${esc(x.tid)}</td>
-      <td class="td-name">${x.navn ? esc(x.navn) : 'Unknown'}</td>
+      <td class="td-name">${x.navn ? esc(x.navn) : t('lbl_unknown')}</td>
       <td class="td-place">${esc(tr(x.kon))}</td>
       <td class="td-place">${esc(x.bopael || x.sted)}</td>
       <td>${(()=>{ const k=(x.forbrydelse||'').toLowerCase(); return GLOSSARY[k] ? `<span class="offence-term" onmouseenter="showGlossary(event,'${esc(x.forbrydelse)}')" onmouseleave="hideGlossary()">${esc(x.forbrydelse)}</span>` : esc(x.forbrydelse); })()}</td>
@@ -14511,24 +14972,29 @@ function renderTable(rows, pfx) {
   return `<div class="table-wrap"><table>
     <thead>
       <tr>
-        <th style="width:55px"  class="${thCls(pfx,'tid')}"          onclick="sortAndRender('${pfx}','tid')">Year</th>
-        <th style="width:160px" class="${thCls(pfx,'navn')}"          onclick="sortAndRender('${pfx}','navn')">Name</th>
-        <th style="width:75px"  class="${thCls(pfx,'kon')}"           onclick="sortAndRender('${pfx}','kon')">Gender</th>
-        <th style="width:110px" class="${thCls(pfx,'sted')}"          onclick="sortAndRender('${pfx}','sted')">Place</th>
-        <th style="width:160px" class="${thCls(pfx,'forbrydelse')}"   onclick="sortAndRender('${pfx}','forbrydelse')">Offence</th>
-        <th style="width:100px" class="${thCls(pfx,'dom')}"           onclick="sortAndRender('${pfx}','dom')">Verdict</th>
-        <th style="width:120px" class="${thCls(pfx,'udfald')}"        onclick="sortAndRender('${pfx}','udfald')">Outcome</th>
+        <th style="width:55px"  class="${thCls(pfx,'tid')}"          onclick="sortAndRender('${pfx}','tid')">${t('col_year')}</th>
+        <th style="width:160px" class="${thCls(pfx,'navn')}"          onclick="sortAndRender('${pfx}','navn')">${t('col_name')}</th>
+        <th style="width:75px"  class="${thCls(pfx,'kon')}"           onclick="sortAndRender('${pfx}','kon')">${t('col_gender')}</th>
+        <th style="width:110px" class="${thCls(pfx,'sted')}"          onclick="sortAndRender('${pfx}','sted')">${t('col_place')}</th>
+        <th style="width:160px" class="${thCls(pfx,'forbrydelse')}"   onclick="sortAndRender('${pfx}','forbrydelse')">${t('col_offence')}</th>
+        <th style="width:100px" class="${thCls(pfx,'dom')}"           onclick="sortAndRender('${pfx}','dom')">${t('col_verdict')}</th>
+        <th style="width:120px" class="${thCls(pfx,'udfald')}"        onclick="sortAndRender('${pfx}','udfald')">${t('col_outcome')}</th>
         <th style="width:28px"></th>
       </tr>
       <tr class="filter-row">
-        <th><input class="col-filter" type="search" id="fi-${pfx}-tid"          placeholder="Year&hellip;"    oninput="onColFilter('${pfx}','tid')"></th>
-        <th><input class="col-filter" type="search" id="fi-${pfx}-navn"          placeholder="Name&hellip;"    oninput="onColFilter('${pfx}','navn')"></th>
-        <th><input class="col-filter" type="search" id="fi-${pfx}-kon"           placeholder="Gender&hellip;"  oninput="onColFilter('${pfx}','kon')"></th>
-        <th><input class="col-filter" type="search" id="fi-${pfx}-sted"          placeholder="Place&hellip;"   oninput="onColFilter('${pfx}','sted')"></th>
-        <th><input class="col-filter" type="search" id="fi-${pfx}-forbrydelse"   placeholder="Offence&hellip;" oninput="onColFilter('${pfx}','forbrydelse')"></th>
-        <th><input class="col-filter" type="search" id="fi-${pfx}-dom"           placeholder="Verdict&hellip;" oninput="onColFilter('${pfx}','dom')"></th>
-        <th><input class="col-filter" type="search" id="fi-${pfx}-udfald"        placeholder="Outcome&hellip;" oninput="onColFilter('${pfx}','udfald')"></th>
-        <th></th>
+        <th><input class="col-filter" type="search" id="fi-${pfx}-tid"          placeholder="${t('ph_year')}"    oninput="onColFilter('${pfx}','tid')"></th>
+        <th><input class="col-filter" type="search" id="fi-${pfx}-navn"          placeholder="${t('ph_name')}"    oninput="onColFilter('${pfx}','navn')"></th>
+        <th>
+          <div class="sr-country-wrap">
+            <button class="sr-country-btn" onclick="toggleDsGenderDd('${pfx}', event)">
+              <span id="ds-gender-lbl-${pfx}">${dsGenderLabel('${pfx}')}</span><span style="font-size:9px;margin-left:4px">▾</span>
+            </button>
+          </div>
+        </th>
+        <th><input class="col-filter" type="search" id="fi-${pfx}-sted"          placeholder="${t('ph_place')}"   oninput="onColFilter('${pfx}','sted')"></th>
+        <th><input class="col-filter" type="search" id="fi-${pfx}-forbrydelse"   placeholder="${t('ph_offence')}" oninput="onColFilter('${pfx}','forbrydelse')"></th>
+        <th><input class="col-filter" type="search" id="fi-${pfx}-dom"           placeholder="${t('ph_verdict')}" oninput="onColFilter('${pfx}','dom')"></th>
+        <th><input class="col-filter" type="search" id="fi-${pfx}-udfald"        placeholder="${t('ph_outcome')}" oninput="onColFilter('${pfx}','udfald')"></th>
       </tr>
     </thead>
     <tbody>${r}</tbody>
@@ -14566,7 +15032,7 @@ function tog(u) {
 
 /* ── Global search ── */
 const DS_LABEL = { faeroerne: 'Faroe Islands', danmark: 'Denmark', norge: 'Norway', slesvig: 'Schleswig-Holstein' };
-let srSort = { col: null, dir: 'asc' };
+let srSort = { col: 'tid', dir: 'asc' };
 let srHits = [];
 
 function sortSr(col) {
@@ -14586,11 +15052,25 @@ function clearSearchFilters() {
   srColFilters = {};
   const gs = document.getElementById('sr-global');
   if (gs) gs.value = '';
-  ['sr-fi-tid','sr-fi-navn','sr-fi-country','sr-fi-forbrydelse','sr-fi-dom','sr-fi-udfald'].forEach(id => {
+  ['sr-fi-tid','sr-fi-navn','sr-fi-forbrydelse','sr-fi-dom'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.value = '';
   });
   srHits = [];
+  srCountryFilter = new Set();
+  document.querySelectorAll('#sr-country-dd input').forEach(el => el.checked = false);
+  const lbl = document.getElementById('sr-country-lbl');
+  if (lbl) lbl.textContent = srCountryLabel();
+  srYearFilter = { min: SR_YEAR_MIN, max: SR_YEAR_MAX };
+  const yrMin = document.getElementById('sr-yr-min');
+  const yrMax = document.getElementById('sr-yr-max');
+  if (yrMin) yrMin.value = SR_YEAR_MIN;
+  if (yrMax) yrMax.value = SR_YEAR_MAX;
+  const yrMinLbl = document.getElementById('sr-yr-min-lbl');
+  const yrMaxLbl = document.getElementById('sr-yr-max-lbl');
+  if (yrMinLbl) yrMinLbl.textContent = SR_YEAR_MIN;
+  if (yrMaxLbl) yrMaxLbl.textContent = SR_YEAR_MAX;
+  updateYearTrack();
   const res = document.getElementById('sr-results');
   const countEl = document.getElementById('sr-count');
   if (res) res.innerHTML = '';
@@ -14601,7 +15081,7 @@ let srColFilters = {};
 
 function onSrGlobal() {
   srColFilters = {};
-  ['sr-fi-tid','sr-fi-navn','sr-fi-country','sr-fi-forbrydelse','sr-fi-dom','sr-fi-udfald'].forEach(id => {
+  ['sr-fi-tid','sr-fi-navn','sr-fi-forbrydelse','sr-fi-dom'].forEach(id => {
     const el = document.getElementById(id); if (el) el.value = '';
   });
   doSearch(null);
@@ -14617,6 +15097,190 @@ function onSrColFilter(col) {
   doSearch(col);
 }
 
+
+/* ── Year range filter ── */
+const SR_YEAR_MIN = 1530, SR_YEAR_MAX = 1820;
+let srYearFilter = { min: SR_YEAR_MIN, max: SR_YEAR_MAX };
+
+function toggleSrYearDd(e) {
+  e.stopPropagation();
+  const dd = document.getElementById('sr-year-dd');
+  if (!dd) return;
+  dd.style.display = dd.style.display === 'none' ? 'block' : 'none';
+}
+
+function updateYearTrack() {
+  const minEl = document.getElementById('sr-yr-min');
+  const maxEl = document.getElementById('sr-yr-max');
+  const fill  = document.getElementById('sr-yr-fill');
+  if (!minEl || !maxEl || !fill) return;
+  const span = SR_YEAR_MAX - SR_YEAR_MIN;
+  const left  = (parseInt(minEl.value) - SR_YEAR_MIN) / span * 100;
+  const right = (SR_YEAR_MAX - parseInt(maxEl.value))  / span * 100;
+  fill.style.left  = left  + '%';
+  fill.style.right = right + '%';
+}
+
+function onSrYearFilter() {
+  const minEl = document.getElementById('sr-yr-min');
+  const maxEl = document.getElementById('sr-yr-max');
+  if (!minEl || !maxEl) return;
+  let lo = parseInt(minEl.value), hi = parseInt(maxEl.value);
+  if (lo > hi) { if (document.activeElement === minEl) { minEl.value = hi; lo = hi; }
+                   else { maxEl.value = lo; hi = lo; } }
+  srYearFilter = { min: lo, max: hi };
+  const minLbl = document.getElementById('sr-yr-min-lbl');
+  const maxLbl = document.getElementById('sr-yr-max-lbl');
+  if (minLbl) minLbl.textContent = lo;
+  if (maxLbl) maxLbl.textContent = hi;
+  const btn = document.getElementById('sr-year-lbl');
+  if (btn) btn.textContent = (lo === SR_YEAR_MIN && hi === SR_YEAR_MAX) ? t('ph_year') : lo + ' – ' + hi;
+  updateYearTrack();
+  doSearch(null);
+  setTimeout(updateYearTrack, 0);
+}
+
+function srYearHtml() {
+  const lo = srYearFilter.min, hi = srYearFilter.max;
+  const span = SR_YEAR_MAX - SR_YEAR_MIN;
+  const fillLeft  = (lo - SR_YEAR_MIN) / span * 100;
+  const fillRight = (SR_YEAR_MAX - hi) / span * 100;
+  return `<div class="yr-labels"><span id="sr-yr-min-lbl">${lo}</span><span id="sr-yr-max-lbl">${hi}</span></div>
+    <div class="yr-track-wrap">
+      <div class="yr-track-bg"></div>
+      <div class="yr-track-fill" id="sr-yr-fill" style="left:${fillLeft}%;right:${fillRight}%"></div>
+      <input type="range" id="sr-yr-min" min="${SR_YEAR_MIN}" max="${SR_YEAR_MAX}" value="${lo}" oninput="onSrYearFilter()">
+      <input type="range" id="sr-yr-max" min="${SR_YEAR_MIN}" max="${SR_YEAR_MAX}" value="${hi}" oninput="onSrYearFilter()">
+    </div>`;
+}
+
+/* ── Dataset gender multi-select filter ── */
+let dsGenderFilter = {};
+const pfxDbKey = { fe:'faeroerne', dk:'danmark', no:'norge', sh:'slesvig' };
+
+function dsGenderOptions(pfx) {
+  const dbKey = pfxDbKey[pfx];
+  return [...new Set((DB[dbKey]||[]).map(x => x.kon).filter(Boolean))].sort();
+}
+
+function dsGenderLabel(pfx) {
+  const sel = dsGenderFilter[pfx] || new Set();
+  if (!sel.size) return t('ph_gender');
+  return [...sel].map(v => tr(v)).join(', ');
+}
+
+function toggleDsGenderDd(pfx, e) {
+  e.stopPropagation();
+  const ddId = 'ds-gender-dd-' + pfx;
+  let dd = document.getElementById(ddId);
+  if (!dd) {
+    dd = document.createElement('div');
+    dd.id = ddId;
+    dd.className = 'sr-country-dd';
+    dd.style.display = 'none';
+    const sel = dsGenderFilter[pfx] || new Set();
+    dd.innerHTML = dsGenderOptions(pfx).map(v =>
+      '<label><input type="checkbox" value="' + v + '" ' + (sel.has(v)?'checked':'') + ' onchange="onDsGenderFilter(\''+pfx+'\')"> ' + tr(v) + '</label>'
+    ).join('');
+    document.body.appendChild(dd);
+  }
+  if (dd.style.display !== 'none') { dd.style.display = 'none'; return; }
+  const rect = e.currentTarget.getBoundingClientRect();
+  dd.style.top  = (rect.bottom + 4) + 'px';
+  dd.style.left = rect.left + 'px';
+  dd.style.display = 'block';
+}
+
+function onDsGenderFilter(pfx) {
+  const ddId = 'ds-gender-dd-' + pfx;
+  dsGenderFilter[pfx] = new Set(
+    [...document.querySelectorAll('#' + ddId + ' input:checked')].map(el => el.value)
+  );
+  const lbl = document.getElementById('ds-gender-lbl-' + pfx);
+  if (lbl) lbl.textContent = dsGenderLabel(pfx);
+  onColFilter(pfx, null);
+}
+
+/* ── Dataset year range filter ── */
+let dsYearFilter = { min: SR_YEAR_MIN, max: SR_YEAR_MAX };
+let dsYearBounds = { min: SR_YEAR_MIN, max: SR_YEAR_MAX };
+
+function computeDsYearBounds(dbKey) {
+  const years = (DB[dbKey] || [])
+    .map(x => +(String(x.tid ?? '').match(/\d{4}/)?.[0] ?? 0))
+    .filter(y => y >= 1000 && y <= 2100);
+  return years.length
+    ? { min: Math.min(...years), max: Math.max(...years) }
+    : { min: SR_YEAR_MIN, max: SR_YEAR_MAX };
+}
+
+function updateDsYearTrack() {
+  const minEl = document.getElementById('ds-yr-min');
+  const maxEl = document.getElementById('ds-yr-max');
+  const fill  = document.getElementById('ds-yr-fill');
+  if (!minEl || !maxEl || !fill) return;
+  const span = dsYearBounds.max - dsYearBounds.min || 1;
+  const left  = (parseInt(minEl.value) - dsYearBounds.min) / span * 100;
+  const right = (dsYearBounds.max - parseInt(maxEl.value))  / span * 100;
+  fill.style.left  = Math.max(0, left)  + '%';
+  fill.style.right = Math.max(0, right) + '%';
+}
+
+function onDsYearFilter(pfx) {
+  const minEl = document.getElementById('ds-yr-min');
+  const maxEl = document.getElementById('ds-yr-max');
+  if (!minEl || !maxEl) return;
+  let lo = parseInt(minEl.value), hi = parseInt(maxEl.value);
+  if (lo > hi) { if (document.activeElement === minEl) { minEl.value = hi; lo = hi; }
+                  else { maxEl.value = lo; hi = lo; } }
+  dsYearFilter = { min: lo, max: hi };
+  const minLbl = document.getElementById('ds-yr-min-lbl');
+  const maxLbl = document.getElementById('ds-yr-max-lbl');
+  if (minLbl) minLbl.textContent = lo;
+  if (maxLbl) maxLbl.textContent = hi;
+  updateDsYearTrack();
+  // Re-trigger the column filter to refresh the table
+  onColFilter(pfx, null);
+}
+
+/* ── Country multi-select filter ── */
+let srCountryFilter = new Set();
+
+function srCountryLabel() {
+  if (srCountryFilter.size === 0 || srCountryFilter.size === 4) return t('ph_country');
+  return [...srCountryFilter].map(ds => DS_LABEL[ds] || ds).join(', ');
+}
+
+function toggleSrCountryDd(e) {
+  e.stopPropagation();
+  let dd = document.getElementById('sr-country-dd');
+  if (!dd) {
+    // Create dropdown on body so it's never clipped by table
+    dd = document.createElement('div');
+    dd.id = 'sr-country-dd';
+    dd.className = 'sr-country-dd';
+    dd.style.display = 'none';
+    dd.innerHTML = ['faeroerne','danmark','norge','slesvig'].map(ds =>
+      '<label><input type="checkbox" value="' + ds + '" ' + (srCountryFilter.has(ds)?'checked':'') + ' onchange="onSrCountryFilter()"> ' + (DS_LABEL[ds]||ds) + '</label>'
+    ).join('');
+    document.body.appendChild(dd);
+  }
+  if (dd.style.display !== 'none') { dd.style.display = 'none'; return; }
+  const rect = e.currentTarget.getBoundingClientRect();
+  dd.style.top  = (rect.bottom + 4) + 'px';
+  dd.style.left = rect.left + 'px';
+  dd.style.display = 'block';
+}
+
+function onSrCountryFilter() {
+  srCountryFilter = new Set(
+    [...document.querySelectorAll('#sr-country-dd input:checked')].map(el => el.value)
+  );
+  const lbl = document.getElementById('sr-country-lbl');
+  if (lbl) lbl.textContent = srCountryLabel();
+  doSearch(null);
+}
+
 function doSearch(activeCol) {
   const res = document.getElementById('sr-results');
   const countEl = document.getElementById('sr-count');
@@ -14624,7 +15288,6 @@ function doSearch(activeCol) {
 
   const gs = (document.getElementById('sr-global') || {value:''}).value.toLowerCase().trim();
   const hasCol = Object.keys(srColFilters).length > 0;
-  if (!gs && !hasCol) { res.innerHTML = ''; if (countEl) countEl.textContent = ''; return; }
 
   const hits = [];
   for (const [ds, rows] of Object.entries(DB)) {
@@ -14637,11 +15300,20 @@ function doSearch(activeCol) {
           x.kilde, x.kommentarer, x.ekstra
         ].map(v => String(v ?? '')).join(' ').toLowerCase();
         if (!text.includes(gs)) continue;
+        if (srCountryFilter.size > 0 && !srCountryFilter.has(ds)) continue;
+        if (srYearFilter.min !== SR_YEAR_MIN || srYearFilter.max !== SR_YEAR_MAX) {
+          const yr = +(String(x.tid ?? '').match(/\d{4}/)?.[0] ?? 0);
+          if (yr === 0 || yr < srYearFilter.min || yr > srYearFilter.max) continue;
+        }
       } else {
         const f = srColFilters;
         if (f.tid         && !String(x.tid ?? '').toLowerCase().includes(f.tid)) continue;
         if (f.navn        && !String(x.navn ?? '').toLowerCase().includes(f.navn)) continue;
-        if (f.country     && !labelL.includes(f.country)) continue;
+        if (srCountryFilter.size > 0 && !srCountryFilter.has(ds)) continue;
+        if (srYearFilter.min !== SR_YEAR_MIN || srYearFilter.max !== SR_YEAR_MAX) {
+          const yr = +(String(x.tid ?? '').match(/\d{4}/)?.[0] ?? 0);
+          if (yr === 0 || yr < srYearFilter.min || yr > srYearFilter.max) continue;
+        }
         if (f.forbrydelse && !String(x.forbrydelse ?? '').toLowerCase().includes(f.forbrydelse)) continue;
         if (f.dom         && !tr(String(x.dom ?? '')).toLowerCase().includes(f.dom)) continue;
         if (f.udfald      && !tr(String(x.udfald ?? '')).toLowerCase().includes(f.udfald)) continue;
@@ -14651,8 +15323,8 @@ function doSearch(activeCol) {
   }
 
   srHits = hits;
-  if (countEl) countEl.textContent = hits.length ? hits.length + ' result' + (hits.length !== 1 ? 's' : '') : '';
-  res.innerHTML = hits.length ? renderTableSearch(hits) : '<p style="color:var(--muted)">No results found.</p>';
+  if (countEl) countEl.textContent = hits.length ? t_results(hits.length) : '';
+  res.innerHTML = hits.length ? renderTableSearch(hits) : '<p style="color:var(--muted)">' + t('lbl_no_results') + '</p>';
 
   Object.entries(srColFilters).forEach(([c, v]) => {
     const el = document.getElementById('sr-fi-' + c); if (el) el.value = v;
@@ -14665,7 +15337,7 @@ function doSearch(activeCol) {
 
 function renderTableSearch(rows) {
   rows = rows || [];
-  if (!rows.length) return '<p style="color:var(--muted);font-size:15px">No results found.</p>';
+  if (!rows.length) return '<p style="color:var(--muted);font-size:15px">' + t('lbl_no_results') + '</p>';
   srHits = rows;
   if (srSort.col) {
     rows = [...rows].sort((a, b) => {
@@ -14673,7 +15345,7 @@ function renderTableSearch(rows) {
       const field = colMap[srSort.col];
       let av = field ? tr(String(a[field] ?? '')) : DS_LABEL[a.ds] || a.ds;
       let bv = field ? tr(String(b[field] ?? '')) : DS_LABEL[b.ds] || b.ds;
-      if (srSort.col === 'tid') { av = +(a.tid ?? 0); bv = +(b.tid ?? 0); }
+      if (srSort.col === 'tid') { av = +(String(a.tid ?? '').match(/\d{4}/)?.[0] ?? 0); bv = +(String(b.tid ?? '').match(/\d{4}/)?.[0] ?? 0); }
       else { av = av.toLowerCase(); bv = bv.toLowerCase(); }
       return av < bv ? (srSort.dir === 'asc' ? -1 : 1) : av > bv ? (srSort.dir === 'asc' ? 1 : -1) : 0;
     });
@@ -14686,73 +15358,80 @@ function renderTableSearch(rows) {
     let detail = '';
     if (x.ds === 'faeroerne') {
       detail = '<div class="det-grid-2">'
-        + f('kon',         'Gender',   esc(tr(x.kon)))
-        + f('bopael',      'Place',    esc(x.bopael))
-        + f('dom',         'Verdict',  esc(tr(x.dom)))
-        + f('kilde',       'Source',   esc(x.kilde))
-        + f('kommentarer', 'Comments', esc(x.kommentarer))
+        + f('kon',         t('col_gender'),   esc(tr(x.kon)))
+        + f('bopael',      t('col_place'),    esc(x.bopael))
+        + f('dom',         t('col_verdict'),  esc(tr(x.dom)))
+        + f('udfald',      t('col_outcome'),  esc(tr(x.udfald)))
+        + f('kilde',       t('col_source'),   esc(x.kilde))
+        + f('kommentarer', t('col_comments'), esc(x.kommentarer))
         + '</div>';
     } else if (x.ds === 'danmark') {
       detail = '<div class="det-grid-2">'
-        + f('kon',         'Gender',    esc(tr(x.kon)))
-        + f('bopael',      'Place',     esc(x.bopael))
-        + f('land',        'Region',    esc(x.land))
-        + f('sagstype',    'Case type', esc(tr(x.sagstype)))
-        + f('kilde',       'Source',    esc(x.kilde))
-        + f('kommentarer', 'Comments',  esc(x.kommentarer))
-        + f('ekstra',      'Extra info',esc(x.ekstra))
+        + f('kon',         t('col_gender'),    esc(tr(x.kon)))
+        + f('bopael',      t('col_place'),     esc(x.bopael))
+        + f('land',        t('col_region'),    esc(x.land))
+        + f('sagstype',    t('col_casetype'), esc(tr(x.sagstype)))
+        + f('udfald',      t('col_outcome'),   esc(tr(x.udfald)))
+        + f('kilde',       t('col_source'),    esc(x.kilde))
+        + f('kommentarer', t('col_comments'),  esc(x.kommentarer))
+        + f('ekstra',      t('col_extra'),esc(x.ekstra))
         + '</div>';
     } else if (x.ds === 'norge') {
       detail = '<div class="det-grid-2">'
-        + f('kon',    'Gender',              esc(tr(x.kon)))
-        + f('bopael', 'Place',               esc(x.bopael))
-        + f('land',   'Region',              esc(x.land))
-        + f('kilde',  'Source',              esc(x.kilde))
-        + f('ekstra', 'Further information', esc(x.ekstra))
+        + f('kon',    t('col_gender'),              esc(tr(x.kon)))
+        + f('bopael', t('col_place'),               esc(x.bopael))
+        + f('land',   t('col_region'),              esc(x.land))
+        + f('udfald', t('col_outcome'),             esc(tr(x.udfald)))
+        + f('kilde',  t('col_source'),              esc(x.kilde))
+        + f('ekstra', t('col_further'), esc(x.ekstra))
         + '</div>';
     } else if (x.ds === 'slesvig') {
       const linkHtml = x.links ? `<a href="${esc(x.links)}" target="_blank">${esc(x.links)}</a>` : '';
       detail = '<div class="det-grid-2">'
-        + f('kon',         'Gender',        esc(tr(x.kon)))
-        + f('sted',        'Place',         esc(x.sted))
-        + f('region',      'Area',          esc(x.region))
-        + f('land',        'Territory',     esc(x.land))
-        + f('kilde',       'Source',        esc(x.kilde))
-        + f('kommentarer', 'Comments',      esc(x.kommentarer))
+        + f('kon',         t('col_gender'),        esc(tr(x.kon)))
+        + f('sted',        t('col_place'),         esc(x.sted))
+        + f('region',      t('col_area'),          esc(x.region))
+        + f('land',        t('col_territory'),     esc(x.land))
+        + f('udfald',      t('col_outcome'),       esc(tr(x.udfald)))
+        + f('kilde',       t('col_source'),        esc(x.kilde))
+        + f('kommentarer', t('col_comments'),      esc(x.kommentarer))
         + (x.links ? `<div><p class="det-label">Archival link</p><p class="det-val">${linkHtml}</p></div>` : '')
         + '</div>';
     }
     return `<tr class="data-row" id="row_${u}" onclick="tog('${u}')">
       <td class="td-year">${esc(x.tid)}</td>
-      <td class="td-name">${x.navn ? esc(x.navn) : 'Unknown'}</td>
+      <td class="td-name">${x.navn ? esc(x.navn) : t('lbl_unknown')}</td>
       <td>${esc(DS_LABEL[x.ds] || x.ds)}</td>
       <td>${offence ? (GLOSSARY[offence.toLowerCase()] ? `<span class="offence-term" onmouseenter="showGlossary(event,'${esc(offence)}')" onmouseleave="hideGlossary()">${esc(offence)}</span>` : esc(offence)) : '<span style="color:var(--muted)">&#8212;</span>'}</td>
       <td>${x.dom ? (VERDICT_GLOSSARY[(x.dom||'').toLowerCase()] ? `<span class="offence-term" onmouseenter="showVerdictGlossary(event,'${esc(x.dom)}')" onmouseleave="hideGlossary()">${esc(tr(x.dom))}</span>` : esc(tr(x.dom))) : '<span style="color:var(--muted)">&#8212;</span>'}</td>
-      <td>${outcome ? esc(tr(outcome)) : '<span style="color:var(--muted)">&#8212;</span>'}</td>
       <td class="td-toggle" id="arr_${u}">&#9658;</td>
     </tr>
-    <tr class="detail-row" id="det_${u}" style="display:none"><td colspan="7">
+    <tr class="detail-row" id="det_${u}" style="display:none"><td colspan="6">
       <div class="detail-inner">${detail}</div>
     </td></tr>`;
   }).join('');
   return `<div class="table-wrap"><table>
     <thead>
       <tr>
-        <th style="width:55px"  class="sortable ${srSort.col==='tid'         ? (srSort.dir==='asc' ? 'sort-asc' : 'sort-desc') : ''}" onclick="sortSr('tid')">Year</th>
-        <th style="width:180px" class="sortable ${srSort.col==='navn'        ? (srSort.dir==='asc' ? 'sort-asc' : 'sort-desc') : ''}" onclick="sortSr('navn')">Name</th>
-        <th style="width:150px" class="sortable ${srSort.col==='country'     ? (srSort.dir==='asc' ? 'sort-asc' : 'sort-desc') : ''}" onclick="sortSr('country')">Country</th>
-        <th class="sortable ${srSort.col==='forbrydelse' ? (srSort.dir==='asc' ? 'sort-asc' : 'sort-desc') : ''}" onclick="sortSr('forbrydelse')">Offence</th>
-        <th style="width:130px" class="sortable ${srSort.col==='dom'         ? (srSort.dir==='asc' ? 'sort-asc' : 'sort-desc') : ''}" onclick="sortSr('dom')">Verdict</th>
-        <th style="width:160px" class="sortable ${srSort.col==='udfald'      ? (srSort.dir==='asc' ? 'sort-asc' : 'sort-desc') : ''}" onclick="sortSr('udfald')">Outcome</th>
+        <th style="width:55px"  class="sortable ${srSort.col==='tid'         ? (srSort.dir==='asc' ? 'sort-asc' : 'sort-desc') : ''}" onclick="sortSr('tid')">${t('col_year')}</th>
+        <th style="width:180px" class="sortable ${srSort.col==='navn'        ? (srSort.dir==='asc' ? 'sort-asc' : 'sort-desc') : ''}" onclick="sortSr('navn')">${t('col_name')}</th>
+        <th style="width:150px" class="sortable ${srSort.col==='country'     ? (srSort.dir==='asc' ? 'sort-asc' : 'sort-desc') : ''}" onclick="sortSr('country')">${t('col_country')}</th>
+        <th class="sortable ${srSort.col==='forbrydelse' ? (srSort.dir==='asc' ? 'sort-asc' : 'sort-desc') : ''}" onclick="sortSr('forbrydelse')">${t('col_offence')}</th>
+        <th style="width:130px" class="sortable ${srSort.col==='dom'         ? (srSort.dir==='asc' ? 'sort-asc' : 'sort-desc') : ''}" onclick="sortSr('dom')">${t('col_verdict')}</th>
         <th style="width:28px"></th>
       </tr>
       <tr class="filter-row">
-        <th><input class="col-filter" type="search" id="sr-fi-tid"         placeholder="Year&hellip;"    oninput="onSrColFilter('tid')"></th>
-        <th><input class="col-filter" type="search" id="sr-fi-navn"        placeholder="Name&hellip;"    oninput="onSrColFilter('navn')"></th>
-        <th><input class="col-filter" type="search" id="sr-fi-country"     placeholder="Country&hellip;" oninput="onSrColFilter('country')"></th>
-        <th><input class="col-filter" type="search" id="sr-fi-forbrydelse" placeholder="Offence&hellip;" oninput="onSrColFilter('forbrydelse')"></th>
-        <th><input class="col-filter" type="search" id="sr-fi-dom"         placeholder="Verdict&hellip;" oninput="onSrColFilter('dom')"></th>
-        <th><input class="col-filter" type="search" id="sr-fi-udfald"      placeholder="Outcome&hellip;" oninput="onSrColFilter('udfald')"></th>
+        <th><input class="col-filter" type="search" id="sr-fi-tid"         placeholder="${t('ph_year')}"    oninput="onSrColFilter('tid')"></th>
+        <th><input class="col-filter" type="search" id="sr-fi-navn"        placeholder="${t('ph_name')}"    oninput="onSrColFilter('navn')"></th>
+        <th>
+          <div class="sr-country-wrap">
+            <button class="sr-country-btn" onclick="toggleSrCountryDd(event)">
+              <span id="sr-country-lbl">${srCountryLabel()}</span><span style="font-size:9px;margin-left:4px">▾</span>
+            </button>
+          </div>
+        </th>
+        <th><input class="col-filter" type="search" id="sr-fi-forbrydelse" placeholder="${t('ph_offence')}" oninput="onSrColFilter('forbrydelse')"></th>
+        <th><input class="col-filter" type="search" id="sr-fi-dom"         placeholder="${t('ph_verdict')}" oninput="onSrColFilter('dom')"></th>
         <th></th>
       </tr>
     </thead>
@@ -14778,7 +15457,7 @@ function onGlobalSearch(pfx) {
   const fn = renderers[pfx] || renderTable;
   document.getElementById(containerOf[pfx]).innerHTML = fn(rows, pfx);
   const countEl = document.getElementById(countElOf[pfx]);
-  if (countEl) countEl.textContent = rows.length + (rows.length === 1 ? ' case' : ' cases');
+  if (countEl) countEl.textContent = t_cases(rows.length);
 }
 
 /* ── Dropdown menus ── */
@@ -14798,6 +15477,15 @@ function ddEnter(ddId, btnId) {
   ddCancelClose();
   openDd(ddId, btnId);
 }
+
+function positionFlyout(wrapId, flyoutId) {
+  const wrap = document.getElementById(wrapId);
+  const flyout = document.getElementById(flyoutId);
+  if (!wrap || !flyout) return;
+  const r = wrap.getBoundingClientRect();
+  flyout.style.top  = r.top + 'px';
+  flyout.style.left = r.right + 'px';
+}
 function ddLeave() {
   ddCloseTimer = setTimeout(closeAllDd, 150);
 }
@@ -14814,64 +15502,118 @@ function toggleDd(e) {
   const dd = document.getElementById('dd-datasets');
   dd.classList.contains('open') ? closeAllDd() : openDd('dd-datasets','btn-datasets');
 }
+function toggleDdAbout(e) {
+  e.stopPropagation();
+  ddCancelClose();
+  const dd = document.getElementById('dd-about');
+  dd.classList.contains('open') ? closeAllDd() : openDd('dd-about','btn-about');
+}
 function toggleDd2(e) {
   e.stopPropagation();
   ddCancelClose();
   const dd = document.getElementById('dd-context');
   dd.classList.contains('open') ? closeAllDd() : openDd('dd-context','btn-context');
 }
+document.addEventListener('mouseover', function(e) {
+  const wrap = e.target.closest('.has-flyout');
+  if (wrap && wrap.id) {
+    const flyoutId = wrap.id.replace('-wrap', '');
+    positionFlyout(wrap.id, flyoutId);
+  }
+});
+
 document.addEventListener('click', function(e) {
+  if (!e.target.closest('.sr-country-wrap')) {
+    const dd = document.getElementById('sr-country-dd');
+    if (dd) dd.style.display = 'none';
+  }
+  if (!e.target.closest('.sr-year-wrap')) {
+    const ydd = document.getElementById('sr-year-dd');
+    if (ydd) ydd.style.display = 'none';
+  }
+  ['fe','dk','no','sh'].forEach(pfx => {
+    if (!e.target.closest('.sr-country-wrap')) {
+      const gdd = document.getElementById('ds-gender-dd-' + pfx);
+      if (gdd) gdd.style.display = 'none';
+    }
+  });
   if (!e.target.closest('.nav-dd')) closeAllDd();
 });
 
 /* ── Navigation ── */
 const DATASET_TABS = ['faeroerne','danmark','norge','slesvig'];
-const CONTEXT_TABS = ['ctx_numbers','ctx_geography','ctx_law','ctx_history'];
+const ABOUT_TABS  = ['about_project','about_employees','about_contact'];
+const CONTEXT_TABS = ['ctx_numbers','ctx_geography','ctx_law','ctx_history','ctx_numbers_dk','ctx_numbers_no','ctx_numbers_sh','ctx_numbers_fe','ctx_law_dk','ctx_law_no','ctx_law_sh','ctx_law_fe'];
 
 function go(tab, btn) {
   document.querySelectorAll('#top-nav > button').forEach(b => b.classList.remove('on'));
   document.getElementById('btn-datasets').classList.remove('on');
   document.getElementById('btn-context').classList.remove('on');
+  document.getElementById('btn-about').classList.remove('on');
   if (DATASET_TABS.includes(tab)) {
     document.getElementById('btn-datasets').classList.add('on');
   } else if (CONTEXT_TABS.includes(tab)) {
     document.getElementById('btn-context').classList.add('on');
+  } else if (ABOUT_TABS.includes(tab)) {
+    document.getElementById('btn-about').classList.add('on');
   } else if (btn) {
     btn.classList.add('on');
   }
   closeAllDd();
+  currentPage = tab;
+  if (tab === 'search') {
+    srYearFilter = { min: SR_YEAR_MIN, max: SR_YEAR_MAX };
+    srCountryFilter = new Set();
+  }
+  if (['faeroerne','danmark','norge','slesvig'].includes(tab)) {
+    const dbKeyMap = { faeroerne:'faeroerne', danmark:'danmark', norge:'norge', slesvig:'slesvig' };
+    const pfxMap   = { faeroerne:'fe', danmark:'dk', norge:'no', slesvig:'sh' };
+    dsYearBounds = computeDsYearBounds(dbKeyMap[tab]);
+    dsYearFilter = { min: dsYearBounds.min, max: dsYearBounds.max };
+    dsGenderFilter[pfxMap[tab]] = new Set();
+    const gdd = document.getElementById('ds-gender-dd-' + pfxMap[tab]);
+    if (gdd) gdd.style.display = 'none';
+  }
   document.getElementById('site-main').innerHTML = PAGES[tab]();
+  if (tab === 'search') {
+    setTimeout(() => { doSearch(null); updateYearTrack(); }, 0);
+  }
+  if (['faeroerne','danmark','norge','slesvig'].includes(tab)) {
+    setTimeout(() => updateDsYearTrack(), 0);
+  }
   const labels = {
-    overview: 'Overview',
-    faeroerne: 'Datasets › Faroe Islands',
-    danmark:   'Datasets › Denmark',
-    norge:     'Datasets › Norway',
-    slesvig:   'Datasets › Schleswig-Holstein',
-    search: 'Search all',
-    ctx_numbers: 'Context › Numbers',
-    ctx_geography: 'Context › Geography',
-    ctx_law: 'Context › Law',
-    ctx_history: 'Context › General history',
-    about: 'About GODWIT'
+    overview: t('breadcrumb_overview'),
+    faeroerne: t('breadcrumb_fe'), danmark: t('breadcrumb_dk'),
+    norge: t('breadcrumb_no'), slesvig: t('breadcrumb_sh'),
+    search: t('breadcrumb_search'),
+    ctx_numbers: t('breadcrumb_ctx_numbers'), ctx_geography: t('breadcrumb_ctx_geography'),
+    ctx_law: t('breadcrumb_ctx_law'), ctx_history: t('breadcrumb_ctx_history'),
+    ctx_numbers_dk: t('breadcrumb_ctx_numbers_dk'), ctx_numbers_no: t('breadcrumb_ctx_numbers_no'),
+    ctx_numbers_sh: t('breadcrumb_ctx_numbers_sh'), ctx_numbers_fe: t('breadcrumb_ctx_numbers_fe'),
+    ctx_law_dk: t('breadcrumb_ctx_law_dk'), ctx_law_no: t('breadcrumb_ctx_law_no'),
+    ctx_law_sh: t('breadcrumb_ctx_law_sh'), ctx_law_fe: t('breadcrumb_ctx_law_fe'),
+    about: t('breadcrumb_about'),
+    about_project: t('breadcrumb_about_project'), about_employees: t('breadcrumb_about_employees'),
+    about_contact: t('breadcrumb_about_contact'),
   };
   const bcBar = document.getElementById('breadcrumb');
   const bc = document.getElementById('bc-current');
   if (bc) bc.textContent = labels[tab] || tab;
-  const bcTabs = ['faeroerne','ctx_numbers','ctx_geography','ctx_law','ctx_history'];
+  const bcTabs = ['faeroerne','ctx_numbers','ctx_geography','ctx_law','ctx_history','ctx_numbers_dk','ctx_numbers_no','ctx_numbers_sh','ctx_numbers_fe','ctx_law_dk','ctx_law_no','ctx_law_sh','ctx_law_fe','about_project','about_employees','about_contact'];
   if (bcBar) bcBar.style.display = bcTabs.includes(tab) ? 'flex' : 'none';
 }
 
 
 /* ── Denmark table renderer ── */
 function renderTableDk(rows, pfx) {
-  if (!rows.length) return '<p style="color:var(--muted);font-size:15px;padding:.5rem 0">No results found.</p>';
+  if (!rows.length) return '<p style="color:var(--muted);font-size:15px;padding:.5rem 0">' + t('lbl_no_results') + '</p>';
   const sorted = applySort(rows, pfx);
   const r = sorted.map((x, i) => {
     const u = pfx + '_' + i;
     const offenceCell = (()=>{ const k=(x.forbrydelse||'').toLowerCase(); return GLOSSARY[k] ? `<span class="offence-term" onmouseenter="showGlossary(event,'${esc(x.forbrydelse)}')" onmouseleave="hideGlossary()">${esc(x.forbrydelse)}</span>` : esc(x.forbrydelse); })();
     return `<tr class="data-row" id="row_${u}" onclick="tog('${u}')">
       <td class="td-year">${esc(x.tid)}</td>
-      <td class="td-name">${x.navn ? esc(x.navn) : 'Unknown'}</td>
+      <td class="td-name">${x.navn ? esc(x.navn) : t('lbl_unknown')}</td>
       <td class="td-place">${esc(tr(x.kon))}</td>
       <td class="td-place">${esc(x.bopael)}</td>
       <td class="td-place">${esc(x.land)}</td>
@@ -14894,23 +15636,29 @@ function renderTableDk(rows, pfx) {
   return `<div class="table-wrap"><table>
     <thead>
       <tr>
-        <th style="width:55px"  class="${thCls(pfx,'tid')}"         onclick="sortAndRender('${pfx}','tid')">Year</th>
-        <th style="width:160px" class="${thCls(pfx,'navn')}"         onclick="sortAndRender('${pfx}','navn')">Name</th>
-        <th style="width:70px"  class="${thCls(pfx,'kon')}"          onclick="sortAndRender('${pfx}','kon')">Gender</th>
-        <th style="width:110px" class="${thCls(pfx,'bopael')}"       onclick="sortAndRender('${pfx}','bopael')">Place</th>
-        <th style="width:110px" class="${thCls(pfx,'land')}"         onclick="sortAndRender('${pfx}','land')">Region</th>
-        <th                     class="${thCls(pfx,'forbrydelse')}"  onclick="sortAndRender('${pfx}','forbrydelse')">Offence</th>
-        <th style="width:130px" class="${thCls(pfx,'dom')}"          onclick="sortAndRender('${pfx}','dom')">Verdict</th>
+        <th style="width:55px"  class="${thCls(pfx,'tid')}"         onclick="sortAndRender('${pfx}','tid')">${t('col_year')}</th>
+        <th style="width:160px" class="${thCls(pfx,'navn')}"         onclick="sortAndRender('${pfx}','navn')">${t('col_name')}</th>
+        <th style="width:70px"  class="${thCls(pfx,'kon')}"          onclick="sortAndRender('${pfx}','kon')">${t('col_gender')}</th>
+        <th style="width:110px" class="${thCls(pfx,'bopael')}"       onclick="sortAndRender('${pfx}','bopael')">${t('col_place')}</th>
+        <th style="width:110px" class="${thCls(pfx,'land')}"         onclick="sortAndRender('${pfx}','land')">${t('col_region')}</th>
+        <th                     class="${thCls(pfx,'forbrydelse')}"  onclick="sortAndRender('${pfx}','forbrydelse')">${t('col_offence')}</th>
+        <th style="width:130px" class="${thCls(pfx,'dom')}"          onclick="sortAndRender('${pfx}','dom')">${t('col_verdict')}</th>
         <th style="width:28px"></th>
       </tr>
       <tr class="filter-row">
-        <th><input class="col-filter" type="search" id="fi-${pfx}-tid"        placeholder="Year&hellip;"    oninput="onColFilterDk('${pfx}','tid')"></th>
-        <th><input class="col-filter" type="search" id="fi-${pfx}-navn"        placeholder="Name&hellip;"    oninput="onColFilterDk('${pfx}','navn')"></th>
-        <th><input class="col-filter" type="search" id="fi-${pfx}-kon"         placeholder="Gender&hellip;"  oninput="onColFilterDk('${pfx}','kon')"></th>
-        <th><input class="col-filter" type="search" id="fi-${pfx}-bopael"      placeholder="Place&hellip;"   oninput="onColFilterDk('${pfx}','bopael')"></th>
-        <th><input class="col-filter" type="search" id="fi-${pfx}-land"        placeholder="Region&hellip;"  oninput="onColFilterDk('${pfx}','land')"></th>
-        <th><input class="col-filter" type="search" id="fi-${pfx}-forbrydelse" placeholder="Offence&hellip;" oninput="onColFilterDk('${pfx}','forbrydelse')"></th>
-        <th><input class="col-filter" type="search" id="fi-${pfx}-dom"         placeholder="Verdict&hellip;" oninput="onColFilterDk('${pfx}','dom')"></th>
+        <th><input class="col-filter" type="search" id="fi-${pfx}-tid"        placeholder="${t('ph_year')}"    oninput="onColFilterDk('${pfx}','tid')"></th>
+        <th><input class="col-filter" type="search" id="fi-${pfx}-navn"        placeholder="${t('ph_name')}"    oninput="onColFilterDk('${pfx}','navn')"></th>
+                <th>
+          <div class="sr-country-wrap">
+            <button class="sr-country-btn" onclick="toggleDsGenderDd('${pfx}', event)">
+              <span id="ds-gender-lbl-${pfx}">${dsGenderLabel('${pfx}')}</span><span style="font-size:9px;margin-left:4px">▾</span>
+            </button>
+          </div>
+        </th>
+        <th><input class="col-filter" type="search" id="fi-${pfx}-bopael"      placeholder="${t('ph_place')}"   oninput="onColFilterDk('${pfx}','bopael')"></th>
+        <th><input class="col-filter" type="search" id="fi-${pfx}-land"        placeholder="${t('ph_region')}"  oninput="onColFilterDk('${pfx}','land')"></th>
+        <th><input class="col-filter" type="search" id="fi-${pfx}-forbrydelse" placeholder="${t('ph_offence')}" oninput="onColFilterDk('${pfx}','forbrydelse')"></th>
+        <th><input class="col-filter" type="search" id="fi-${pfx}-dom"         placeholder="${t('ph_verdict')}" oninput="onColFilterDk('${pfx}','dom')"></th>
         <th></th>
       </tr>
     </thead>
@@ -14927,12 +15675,20 @@ function onColFilterDk(pfx, col) {
   colFilters[pfx] = f;
   const transCols = ['kon','dom'];
   const base = baseRows[pfx] || DB.danmark;
-  const rows = Object.keys(f).length
-    ? base.filter(x => Object.entries(f).every(([c, q]) => {
-        const raw = transCols.includes(c) ? tr(x[c] ?? '') : String(x[c] ?? '');
-        return raw.toLowerCase().includes(q);
-      }))
-    : base;
+  const yearActive = dsYearFilter.min !== dsYearBounds.min || dsYearFilter.max !== dsYearBounds.max;
+  const genderSel = dsGenderFilter[pfx] || new Set();
+  const rows = base.filter(x => {
+    if (genderSel.size > 0 && !genderSel.has(x.kon)) return false;
+    if (yearActive) {
+      const yr = +(String(x.tid ?? '').match(/\d{4}/)?.[0] ?? 0);
+      if (yr === 0 || yr < dsYearFilter.min || yr > dsYearFilter.max) return false;
+    }
+    if (!Object.keys(f).length) return true;
+    return Object.entries(f).every(([c, q]) => {
+      const raw = transCols.includes(c) ? tr(x[c] ?? '') : String(x[c] ?? '');
+      return raw.toLowerCase().includes(q);
+    });
+  });
   document.getElementById(containerOf[pfx]).innerHTML = renderTableDk(rows, pfx);
   Object.entries(f).forEach(([c, v]) => {
     const el = document.getElementById('fi-' + pfx + '-' + c);
@@ -14941,20 +15697,20 @@ function onColFilterDk(pfx, col) {
   const active = document.getElementById('fi-' + pfx + '-' + col);
   if (active) { active.focus(); active.setSelectionRange(9999, 9999); }
   const countEl = document.getElementById(countElOf[pfx]);
-  if (countEl) countEl.textContent = rows.length + (rows.length === 1 ? ' case' : ' cases');
+  if (countEl) countEl.textContent = t_cases(rows.length);
 }
 
 
 /* ── Norway table renderer ── */
 function renderTableNo(rows, pfx) {
-  if (!rows.length) return '<p style="color:var(--muted);font-size:15px;padding:.5rem 0">No results found.</p>';
+  if (!rows.length) return '<p style="color:var(--muted);font-size:15px;padding:.5rem 0">' + t('lbl_no_results') + '</p>';
   const sorted = applySort(rows, pfx);
   const r = sorted.map((x, i) => {
     const u = pfx + '_' + i;
     const offenceCell = (()=>{ const k=(x.forbrydelse||'').toLowerCase(); return GLOSSARY[k] ? `<span class="offence-term" onmouseenter="showGlossary(event,'${esc(x.forbrydelse)}')" onmouseleave="hideGlossary()">${esc(x.forbrydelse)}</span>` : esc(x.forbrydelse); })();
     return `<tr class="data-row" id="row_${u}" onclick="tog('${u}')">
       <td class="td-year">${esc(x.tid)}</td>
-      <td class="td-name">${x.navn ? esc(x.navn) : 'Unknown'}</td>
+      <td class="td-name">${x.navn ? esc(x.navn) : t('lbl_unknown')}</td>
       <td class="td-place">${esc(tr(x.kon))}</td>
       <td class="td-place">${esc(x.bopael)}</td>
       <td class="td-place">${esc(x.land)}</td>
@@ -14975,23 +15731,29 @@ function renderTableNo(rows, pfx) {
   return `<div class="table-wrap"><table>
     <thead>
       <tr>
-        <th style="width:55px"  class="${thCls(pfx,'tid')}"         onclick="sortAndRender('${pfx}','tid')">Year</th>
-        <th style="width:160px" class="${thCls(pfx,'navn')}"         onclick="sortAndRender('${pfx}','navn')">Name</th>
-        <th style="width:70px"  class="${thCls(pfx,'kon')}"          onclick="sortAndRender('${pfx}','kon')">Gender</th>
-        <th style="width:110px" class="${thCls(pfx,'bopael')}"       onclick="sortAndRender('${pfx}','bopael')">Place</th>
-        <th style="width:110px" class="${thCls(pfx,'land')}"         onclick="sortAndRender('${pfx}','land')">Region</th>
-        <th                     class="${thCls(pfx,'forbrydelse')}"  onclick="sortAndRender('${pfx}','forbrydelse')">Offence</th>
-        <th style="width:130px" class="${thCls(pfx,'udfald')}"       onclick="sortAndRender('${pfx}','udfald')">Outcome</th>
+        <th style="width:55px"  class="${thCls(pfx,'tid')}"         onclick="sortAndRender('${pfx}','tid')">${t('col_year')}</th>
+        <th style="width:160px" class="${thCls(pfx,'navn')}"         onclick="sortAndRender('${pfx}','navn')">${t('col_name')}</th>
+        <th style="width:70px"  class="${thCls(pfx,'kon')}"          onclick="sortAndRender('${pfx}','kon')">${t('col_gender')}</th>
+        <th style="width:110px" class="${thCls(pfx,'bopael')}"       onclick="sortAndRender('${pfx}','bopael')">${t('col_place')}</th>
+        <th style="width:110px" class="${thCls(pfx,'land')}"         onclick="sortAndRender('${pfx}','land')">${t('col_region')}</th>
+        <th                     class="${thCls(pfx,'forbrydelse')}"  onclick="sortAndRender('${pfx}','forbrydelse')">${t('col_offence')}</th>
+        <th style="width:130px" class="${thCls(pfx,'udfald')}"       onclick="sortAndRender('${pfx}','udfald')">${t('col_outcome')}</th>
         <th style="width:28px"></th>
       </tr>
       <tr class="filter-row">
-        <th><input class="col-filter" type="search" id="fi-${pfx}-tid"        placeholder="Year&hellip;"    oninput="onColFilterNo('${pfx}','tid')"></th>
-        <th><input class="col-filter" type="search" id="fi-${pfx}-navn"        placeholder="Name&hellip;"    oninput="onColFilterNo('${pfx}','navn')"></th>
-        <th><input class="col-filter" type="search" id="fi-${pfx}-kon"         placeholder="Gender&hellip;"  oninput="onColFilterNo('${pfx}','kon')"></th>
-        <th><input class="col-filter" type="search" id="fi-${pfx}-bopael"      placeholder="Place&hellip;"   oninput="onColFilterNo('${pfx}','bopael')"></th>
-        <th><input class="col-filter" type="search" id="fi-${pfx}-land"        placeholder="Region&hellip;"  oninput="onColFilterNo('${pfx}','land')"></th>
-        <th><input class="col-filter" type="search" id="fi-${pfx}-forbrydelse" placeholder="Offence&hellip;" oninput="onColFilterNo('${pfx}','forbrydelse')"></th>
-        <th><input class="col-filter" type="search" id="fi-${pfx}-udfald"      placeholder="Outcome&hellip;" oninput="onColFilterNo('${pfx}','udfald')"></th>
+        <th><input class="col-filter" type="search" id="fi-${pfx}-tid"        placeholder="${t('ph_year')}"    oninput="onColFilterNo('${pfx}','tid')"></th>
+        <th><input class="col-filter" type="search" id="fi-${pfx}-navn"        placeholder="${t('ph_name')}"    oninput="onColFilterNo('${pfx}','navn')"></th>
+                <th>
+          <div class="sr-country-wrap">
+            <button class="sr-country-btn" onclick="toggleDsGenderDd('${pfx}', event)">
+              <span id="ds-gender-lbl-${pfx}">${dsGenderLabel('${pfx}')}</span><span style="font-size:9px;margin-left:4px">▾</span>
+            </button>
+          </div>
+        </th>
+        <th><input class="col-filter" type="search" id="fi-${pfx}-bopael"      placeholder="${t('ph_place')}"   oninput="onColFilterNo('${pfx}','bopael')"></th>
+        <th><input class="col-filter" type="search" id="fi-${pfx}-land"        placeholder="${t('ph_region')}"  oninput="onColFilterNo('${pfx}','land')"></th>
+        <th><input class="col-filter" type="search" id="fi-${pfx}-forbrydelse" placeholder="${t('ph_offence')}" oninput="onColFilterNo('${pfx}','forbrydelse')"></th>
+        <th><input class="col-filter" type="search" id="fi-${pfx}-udfald"      placeholder="${t('ph_outcome')}" oninput="onColFilterNo('${pfx}','udfald')"></th>
         <th></th>
       </tr>
     </thead>
@@ -15008,12 +15770,20 @@ function onColFilterNo(pfx, col) {
   colFilters[pfx] = f;
   const transCols = ['kon','udfald'];
   const base = baseRows[pfx] || DB.norge;
-  const rows = Object.keys(f).length
-    ? base.filter(x => Object.entries(f).every(([c, q]) => {
-        const raw = transCols.includes(c) ? tr(x[c] ?? '') : String(x[c] ?? '');
-        return raw.toLowerCase().includes(q);
-      }))
-    : base;
+  const yearActive = dsYearFilter.min !== dsYearBounds.min || dsYearFilter.max !== dsYearBounds.max;
+  const genderSel = dsGenderFilter[pfx] || new Set();
+  const rows = base.filter(x => {
+    if (genderSel.size > 0 && !genderSel.has(x.kon)) return false;
+    if (yearActive) {
+      const yr = +(String(x.tid ?? '').match(/\d{4}/)?.[0] ?? 0);
+      if (yr === 0 || yr < dsYearFilter.min || yr > dsYearFilter.max) return false;
+    }
+    if (!Object.keys(f).length) return true;
+    return Object.entries(f).every(([c, q]) => {
+      const raw = transCols.includes(c) ? tr(x[c] ?? '') : String(x[c] ?? '');
+      return raw.toLowerCase().includes(q);
+    });
+  });
   document.getElementById(containerOf[pfx]).innerHTML = renderTableNo(rows, pfx);
   Object.entries(f).forEach(([c, v]) => {
     const el = document.getElementById('fi-' + pfx + '-' + c);
@@ -15022,19 +15792,19 @@ function onColFilterNo(pfx, col) {
   const active = document.getElementById('fi-' + pfx + '-' + col);
   if (active) { active.focus(); active.setSelectionRange(9999, 9999); }
   const countEl = document.getElementById(countElOf[pfx]);
-  if (countEl) countEl.textContent = rows.length + (rows.length === 1 ? ' case' : ' cases');
+  if (countEl) countEl.textContent = t_cases(rows.length);
 }
 
 
 /* ── Schleswig-Holstein table renderer ── */
 function renderTableSh(rows, pfx) {
-  if (!rows.length) return '<p style="color:var(--muted);font-size:15px;padding:.5rem 0">No results found.</p>';
+  if (!rows.length) return '<p style="color:var(--muted);font-size:15px;padding:.5rem 0">' + t('lbl_no_results') + '</p>';
   const sorted = applySort(rows, pfx);
   const r = sorted.map((x, i) => {
     const u = pfx + '_' + i;
     return `<tr class="data-row" id="row_${u}" onclick="tog('${u}')">
       <td class="td-year">${esc(x.tid)}</td>
-      <td class="td-name">${x.navn ? esc(x.navn) : 'Unknown'}</td>
+      <td class="td-name">${x.navn ? esc(x.navn) : t('lbl_unknown')}</td>
       <td class="td-place">${esc(tr(x.kon))}</td>
       <td class="td-place">${esc(x.bopael || x.sted)}</td>
       <td class="td-place">${esc(x.region)}</td>
@@ -15055,23 +15825,29 @@ function renderTableSh(rows, pfx) {
   return `<div class="table-wrap"><table>
     <thead>
       <tr>
-        <th style="width:55px"  class="${thCls(pfx,'tid')}"    onclick="sortAndRender('${pfx}','tid')">Year</th>
-        <th style="width:160px" class="${thCls(pfx,'navn')}"   onclick="sortAndRender('${pfx}','navn')">Name</th>
-        <th style="width:70px"  class="${thCls(pfx,'kon')}"    onclick="sortAndRender('${pfx}','kon')">Gender</th>
-        <th style="width:110px" class="${thCls(pfx,'sted')}"   onclick="sortAndRender('${pfx}','sted')">Place</th>
-        <th style="width:120px" class="${thCls(pfx,'region')}" onclick="sortAndRender('${pfx}','region')">Area</th>
-        <th style="width:100px" class="${thCls(pfx,'land')}"   onclick="sortAndRender('${pfx}','land')">Territory</th>
-        <th style="width:120px" class="${thCls(pfx,'udfald')}" onclick="sortAndRender('${pfx}','udfald')">Outcome</th>
+        <th style="width:55px"  class="${thCls(pfx,'tid')}"    onclick="sortAndRender('${pfx}','tid')">${t('col_year')}</th>
+        <th style="width:160px" class="${thCls(pfx,'navn')}"   onclick="sortAndRender('${pfx}','navn')">${t('col_name')}</th>
+        <th style="width:70px"  class="${thCls(pfx,'kon')}"    onclick="sortAndRender('${pfx}','kon')">${t('col_gender')}</th>
+        <th style="width:110px" class="${thCls(pfx,'sted')}"   onclick="sortAndRender('${pfx}','sted')">${t('col_place')}</th>
+        <th style="width:120px" class="${thCls(pfx,'region')}" onclick="sortAndRender('${pfx}','region')">${t('col_area')}</th>
+        <th style="width:100px" class="${thCls(pfx,'land')}"   onclick="sortAndRender('${pfx}','land')">${t('col_territory')}</th>
+        <th style="width:120px" class="${thCls(pfx,'udfald')}" onclick="sortAndRender('${pfx}','udfald')">${t('col_outcome')}</th>
         <th style="width:28px"></th>
       </tr>
       <tr class="filter-row">
-        <th><input class="col-filter" type="search" id="fi-${pfx}-tid"    placeholder="Year&hellip;"      oninput="onColFilterSh('${pfx}','tid')"></th>
-        <th><input class="col-filter" type="search" id="fi-${pfx}-navn"   placeholder="Name&hellip;"      oninput="onColFilterSh('${pfx}','navn')"></th>
-        <th><input class="col-filter" type="search" id="fi-${pfx}-kon"    placeholder="Gender&hellip;"    oninput="onColFilterSh('${pfx}','kon')"></th>
-        <th><input class="col-filter" type="search" id="fi-${pfx}-sted"   placeholder="Place&hellip;"     oninput="onColFilterSh('${pfx}','sted')"></th>
-        <th><input class="col-filter" type="search" id="fi-${pfx}-region" placeholder="Area&hellip;"      oninput="onColFilterSh('${pfx}','region')"></th>
-        <th><input class="col-filter" type="search" id="fi-${pfx}-land"   placeholder="Territory&hellip;" oninput="onColFilterSh('${pfx}','land')"></th>
-        <th><input class="col-filter" type="search" id="fi-${pfx}-udfald" placeholder="Outcome&hellip;"   oninput="onColFilterSh('${pfx}','udfald')"></th>
+        <th><input class="col-filter" type="search" id="fi-${pfx}-tid"    placeholder="${t('ph_year')}"      oninput="onColFilterSh('${pfx}','tid')"></th>
+        <th><input class="col-filter" type="search" id="fi-${pfx}-navn"   placeholder="${t('ph_name')}"      oninput="onColFilterSh('${pfx}','navn')"></th>
+                <th>
+          <div class="sr-country-wrap">
+            <button class="sr-country-btn" onclick="toggleDsGenderDd('${pfx}', event)">
+              <span id="ds-gender-lbl-${pfx}">${dsGenderLabel('${pfx}')}</span><span style="font-size:9px;margin-left:4px">▾</span>
+            </button>
+          </div>
+        </th>
+        <th><input class="col-filter" type="search" id="fi-${pfx}-sted"   placeholder="${t('ph_place')}"     oninput="onColFilterSh('${pfx}','sted')"></th>
+        <th><input class="col-filter" type="search" id="fi-${pfx}-region" placeholder="${t('ph_area')}"      oninput="onColFilterSh('${pfx}','region')"></th>
+        <th><input class="col-filter" type="search" id="fi-${pfx}-land"   placeholder="${t('ph_territory')}" oninput="onColFilterSh('${pfx}','land')"></th>
+        <th><input class="col-filter" type="search" id="fi-${pfx}-udfald" placeholder="${t('ph_outcome')}"   oninput="onColFilterSh('${pfx}','udfald')"></th>
         <th></th>
       </tr>
     </thead>
@@ -15088,12 +15864,20 @@ function onColFilterSh(pfx, col) {
   colFilters[pfx] = f;
   const transCols = ['kon','udfald'];
   const base = baseRows[pfx] || DB.slesvig;
-  const rows = Object.keys(f).length
-    ? base.filter(x => Object.entries(f).every(([c, q]) => {
-        const raw = transCols.includes(c) ? tr(x[c] ?? '') : String(x[c] ?? '');
-        return raw.toLowerCase().includes(q);
-      }))
-    : base;
+  const yearActive = dsYearFilter.min !== dsYearBounds.min || dsYearFilter.max !== dsYearBounds.max;
+  const genderSel = dsGenderFilter[pfx] || new Set();
+  const rows = base.filter(x => {
+    if (genderSel.size > 0 && !genderSel.has(x.kon)) return false;
+    if (yearActive) {
+      const yr = +(String(x.tid ?? '').match(/\d{4}/)?.[0] ?? 0);
+      if (yr === 0 || yr < dsYearFilter.min || yr > dsYearFilter.max) return false;
+    }
+    if (!Object.keys(f).length) return true;
+    return Object.entries(f).every(([c, q]) => {
+      const raw = transCols.includes(c) ? tr(x[c] ?? '') : String(x[c] ?? '');
+      return raw.toLowerCase().includes(q);
+    });
+  });
   document.getElementById(containerOf[pfx]).innerHTML = renderTableSh(rows, pfx);
   Object.entries(f).forEach(([c, v]) => {
     const el = document.getElementById('fi-' + pfx + '-' + c);
@@ -15102,7 +15886,7 @@ function onColFilterSh(pfx, col) {
   const active = document.getElementById('fi-' + pfx + '-' + col);
   if (active) { active.focus(); active.setSelectionRange(9999, 9999); }
   const countEl = document.getElementById(countElOf[pfx]);
-  if (countEl) countEl.textContent = rows.length + (rows.length === 1 ? ' case' : ' cases');
+  if (countEl) countEl.textContent = t_cases(rows.length);
 }
 
 /* ── Page content ── */
@@ -15115,10 +15899,20 @@ const PAGES = {
     return `<p class="section-label">Dataset</p>
     <h1 class="page-title">Denmark</h1>
     <span class="title-rule"></span>
-    <p class="page-sub">Witchcraft trial records &mdash; click column headers to sort, type in filters to search by column, click a row to read details</p>
+    <p class="page-sub">${t('sub_dataset')}</p>
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem;">
       <span class="filter-count" id="dk-n">${n} cases</span>
-      <input class="global-search" type="search" id="gs-dk" placeholder="Search dataset&hellip;" oninput="onGlobalSearch('dk')">
+      <input class="global-search" type="search" id="gs-dk" placeholder="${t('ph_search_ds')}" oninput="onGlobalSearch('dk')">
+    </div>
+        <div class="sr-year-bar" style="margin-bottom:.75rem">
+      <span class="sr-year-bar-lbl" id="ds-yr-min-lbl">${dsYearBounds.min}</span>
+      <div class="yr-track-wrap" style="flex:1">
+        <div class="yr-track-bg"></div>
+        <div class="yr-track-fill" id="ds-yr-fill"></div>
+        <input type="range" id="ds-yr-min" min="${dsYearBounds.min}" max="${dsYearBounds.max}" value="${dsYearBounds.min}" oninput="onDsYearFilter('dk')">
+        <input type="range" id="ds-yr-max" min="${dsYearBounds.min}" max="${dsYearBounds.max}" value="${dsYearBounds.max}" oninput="onDsYearFilter('dk')">
+      </div>
+      <span class="sr-year-bar-lbl" id="ds-yr-max-lbl">${dsYearBounds.max}</span>
     </div>
     <div id="dk-tbl">${renderTableDk(DB.danmark, 'dk')}</div>`;
   },
@@ -15130,10 +15924,20 @@ const PAGES = {
     return `<p class="section-label">Dataset</p>
     <h1 class="page-title">Norway</h1>
     <span class="title-rule"></span>
-    <p class="page-sub">Witchcraft trial records &mdash; click column headers to sort, type in filters to search by column, click a row to read details</p>
+    <p class="page-sub">${t('sub_dataset')}</p>
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem;">
       <span class="filter-count" id="no-n">${n} cases</span>
-      <input class="global-search" type="search" id="gs-no" placeholder="Search dataset&hellip;" oninput="onGlobalSearch('no')">
+      <input class="global-search" type="search" id="gs-no" placeholder="${t('ph_search_ds')}" oninput="onGlobalSearch('no')">
+    </div>
+        <div class="sr-year-bar" style="margin-bottom:.75rem">
+      <span class="sr-year-bar-lbl" id="ds-yr-min-lbl">${dsYearBounds.min}</span>
+      <div class="yr-track-wrap" style="flex:1">
+        <div class="yr-track-bg"></div>
+        <div class="yr-track-fill" id="ds-yr-fill"></div>
+        <input type="range" id="ds-yr-min" min="${dsYearBounds.min}" max="${dsYearBounds.max}" value="${dsYearBounds.min}" oninput="onDsYearFilter('no')">
+        <input type="range" id="ds-yr-max" min="${dsYearBounds.min}" max="${dsYearBounds.max}" value="${dsYearBounds.max}" oninput="onDsYearFilter('no')">
+      </div>
+      <span class="sr-year-bar-lbl" id="ds-yr-max-lbl">${dsYearBounds.max}</span>
     </div>
     <div id="no-tbl">${renderTableNo(DB.norge, 'no')}</div>`;
   },
@@ -15145,10 +15949,20 @@ const PAGES = {
     return `<p class="section-label">Dataset</p>
     <h1 class="page-title">Schleswig-Holstein</h1>
     <span class="title-rule"></span>
-    <p class="page-sub">Witchcraft trial records &mdash; click column headers to sort, type in filters to search by column, click a row to read details</p>
+    <p class="page-sub">${t('sub_dataset')}</p>
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem;">
       <span class="filter-count" id="sh-n">${n} cases</span>
-      <input class="global-search" type="search" id="gs-sh" placeholder="Search dataset&hellip;" oninput="onGlobalSearch('sh')">
+      <input class="global-search" type="search" id="gs-sh" placeholder="${t('ph_search_ds')}" oninput="onGlobalSearch('sh')">
+    </div>
+        <div class="sr-year-bar" style="margin-bottom:.75rem">
+      <span class="sr-year-bar-lbl" id="ds-yr-min-lbl">${dsYearBounds.min}</span>
+      <div class="yr-track-wrap" style="flex:1">
+        <div class="yr-track-bg"></div>
+        <div class="yr-track-fill" id="ds-yr-fill"></div>
+        <input type="range" id="ds-yr-min" min="${dsYearBounds.min}" max="${dsYearBounds.max}" value="${dsYearBounds.min}" oninput="onDsYearFilter('sh')">
+        <input type="range" id="ds-yr-max" min="${dsYearBounds.min}" max="${dsYearBounds.max}" value="${dsYearBounds.max}" oninput="onDsYearFilter('sh')">
+      </div>
+      <span class="sr-year-bar-lbl" id="ds-yr-max-lbl">${dsYearBounds.max}</span>
     </div>
     <div id="sh-tbl">${renderTableSh(DB.slesvig, 'sh')}</div>`;
   },
@@ -15156,54 +15970,54 @@ const PAGES = {
   overview() {
     const n = DB.faeroerne.length;
     const total = DB.faeroerne.length + DB.danmark.length + DB.norge.length + DB.slesvig.length;
-    return `<p class="section-label">Database</p>
-    <h1 class="page-title">Witchcraft Database of the Danish Realm</h1>
+    return `<p class="section-label">${t('sec_database')}</p>
+    <h1 class="page-title">${t('title_frontpage')}</h1>
     <span class="title-rule"></span>
-    <p class="page-sub">A systematic collection of witchcraft trial records from the Danish realm, 1530&ndash;1720</p>
+    <p class="page-sub">${t('sub_frontpage')}</p>
     <div class="stat-row">
-      <div class="stat"><span class="stat-n">${total.toLocaleString()}</span><span class="stat-l">known cases</span></div>
-      <div class="stat"><span class="stat-n">1530&ndash;1720</span><span class="stat-l">period covered</span></div>
-      <div class="stat"><span class="stat-n">82%</span><span class="stat-l">female accused</span></div>
-      <div class="stat"><span class="stat-n">4</span><span class="stat-l">territories</span></div>
+      <div class="stat"><span class="stat-n">${total.toLocaleString()}</span><span class="stat-l">${t('stat_cases')}</span></div>
+      <div class="stat"><span class="stat-n">1530&ndash;1720</span><span class="stat-l">${t('stat_period')}</span></div>
+      <div class="stat"><span class="stat-n">82%</span><span class="stat-l">${t('stat_female')}</span></div>
+      <div class="stat"><span class="stat-n">4</span><span class="stat-l">${t('stat_territories')}</span></div>
     </div>
     <div class="ds-grid">
       <div class="ds-card" onclick="go('danmark')">
         <p class="ds-name">Denmark</p><p class="ds-years">c. 1544&ndash;1720</p>
-        <p class="ds-count">${DB.danmark.length}</p><p class="ds-count-l">cases</p>
-        <span class="ds-cta">Browse dataset</span>
+        <p class="ds-count">${DB.danmark.length}</p><p class="ds-count-l">${t('card_cases')}</p>
+        <span class="ds-cta">${t('card_browse')}</span>
       </div>
       <div class="ds-card" onclick="go('norge')">
         <p class="ds-name">Norway</p><p class="ds-years">c. 1539&ndash;1754</p>
-        <p class="ds-count">${DB.norge.length}</p><p class="ds-count-l">cases</p>
-        <span class="ds-cta">Browse dataset</span>
+        <p class="ds-count">${DB.norge.length}</p><p class="ds-count-l">${t('card_cases')}</p>
+        <span class="ds-cta">${t('card_browse')}</span>
       </div>
       <div class="ds-card" onclick="go('slesvig')">
         <p class="ds-name">Schleswig-Holstein</p><p class="ds-years">c. 1530&ndash;1735</p>
-        <p class="ds-count">${DB.slesvig.length}</p><p class="ds-count-l">cases</p>
-        <span class="ds-cta">Browse dataset</span>
+        <p class="ds-count">${DB.slesvig.length}</p><p class="ds-count-l">${t('card_cases')}</p>
+        <span class="ds-cta">${t('card_browse')}</span>
       </div>
       <div class="ds-card" onclick="go('faeroerne')">
         <p class="ds-name">Faroe Islands</p><p class="ds-years">c. 1637&ndash;1720</p>
-        <p class="ds-count">${n}</p><p class="ds-count-l">cases</p>
-        <span class="ds-cta">Browse dataset</span>
+        <p class="ds-count">${n}</p><p class="ds-count-l">${t('card_cases')}</p>
+        <span class="ds-cta">${t('card_browse')}</span>
       </div>
     </div>
     <p class="intro-block">The GODWIT database is a systematic collection of witchcraft trial records from across the Danish realm during the early modern period. The project is led by Professor Louise Nyholm Kallestrup at the University of Southern Denmark and covers legal sources from Denmark, Norway, Iceland, the Faroe Islands, and Scania.</p>
     <div class="fig-section">
-      <p class="fig-heading">What the database can illustrate</p>
-      <p class="fig-caveat">The figures below reflect only the cases documented in surviving sources. They do not represent the full extent of witchcraft prosecutions across the Danish realm — an unknown number of trials went unrecorded or have been lost. All statistics should be read as indicative of patterns in the <em>known</em> record, not as a complete historical account.</p>
+      <p class="fig-heading">${t('fig_heading')}</p>
+      <p class="fig-caveat">${t('fig_caveat')}</p>
       <div class="fig-grid">
         <div class="fig-block">
-          <p class="fig-label">Gender</p>
-          <p class="fig-note">82% of accused were women, 18% men — based on 2,822 cases with recorded gender across all four territories.</p>
+          <p class="fig-label">${t('fig_gender')}</p>
+          <p class="fig-note">${t('fig_gender_note')}</p>
           <div class="fig-bar-wrap">
-            <div class="fig-bar" style="width:82%"><span>Women &nbsp;82%</span></div>
-            <div class="fig-bar fig-bar-alt" style="width:18%"><span>Men &nbsp;18%</span></div>
+            <div class="fig-bar" style="width:82%"><span>${t('fig_women')} &nbsp;82%</span></div>
+            <div class="fig-bar fig-bar-alt" style="width:18%"><span>${t('fig_men')} &nbsp;18%</span></div>
           </div>
         </div>
         <div class="fig-block">
-          <p class="fig-label">By territory</p>
-          <p class="fig-note">Cases are unevenly distributed across the realm, reflecting both population size and the intensity of prosecutions.</p>
+          <p class="fig-label">${t('fig_territory')}</p>
+          <p class="fig-note">${t('fig_territory_note')}</p>
           <div class="fig-bar-wrap">
             <div class="fig-bar" style="width:100%"><span>Denmark &nbsp;1,384</span></div>
             <div class="fig-bar" style="width:63%"><span>Schleswig-Holstein &nbsp;870</span></div>
@@ -15212,14 +16026,14 @@ const PAGES = {
           </div>
         </div>
         <div class="fig-block">
-          <p class="fig-label">Time period</p>
-          <p class="fig-note">Records span nearly two centuries, from the earliest documented prosecutions c. 1530 through the waning of large-scale trials after 1700.</p>
+          <p class="fig-label">${t('fig_time')}</p>
+          <p class="fig-note">${t('fig_time_note')}</p>
           <div class="fig-timeline">
             <div class="fig-tl-bar"></div>
             <div class="fig-tl-labels">
               <span>1530</span><span>1580</span><span>1630</span><span>1680</span><span>1720</span>
             </div>
-            <div class="fig-tl-note">Peak intensity: c. 1610&ndash;1660</div>
+            <div class="fig-tl-note">${t('fig_peak')}</div>
           </div>
         </div>
       </div>
@@ -15234,68 +16048,170 @@ const PAGES = {
     return `<p class="section-label">Dataset</p>
     <h1 class="page-title">Faroe Islands</h1>
     <span class="title-rule"></span>
-    <p class="page-sub">Witchcraft trial records &mdash; click column headers to sort, type in filters to search by column, click a row to read the source text</p>
+    <p class="page-sub">${t('sub_fe')}</p>
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem;">
       <span class="filter-count" id="fe-n">${n} cases</span>
-      <input class="global-search" type="search" id="gs-fe" placeholder="Search dataset&hellip;" oninput="onGlobalSearch('fe')">
+      <input class="global-search" type="search" id="gs-fe" placeholder="${t('ph_search_ds')}" oninput="onGlobalSearch('fe')">
+    </div>
+        <div class="sr-year-bar" style="margin-bottom:.75rem">
+      <span class="sr-year-bar-lbl" id="ds-yr-min-lbl">${dsYearBounds.min}</span>
+      <div class="yr-track-wrap" style="flex:1">
+        <div class="yr-track-bg"></div>
+        <div class="yr-track-fill" id="ds-yr-fill"></div>
+        <input type="range" id="ds-yr-min" min="${dsYearBounds.min}" max="${dsYearBounds.max}" value="${dsYearBounds.min}" oninput="onDsYearFilter('fe')">
+        <input type="range" id="ds-yr-max" min="${dsYearBounds.min}" max="${dsYearBounds.max}" value="${dsYearBounds.max}" oninput="onDsYearFilter('fe')">
+      </div>
+      <span class="sr-year-bar-lbl" id="ds-yr-max-lbl">${dsYearBounds.max}</span>
     </div>
     <div id="fe-tbl">${renderTable(DB.faeroerne, 'fe')}</div>`;
   },
 
   search() {
-    return `<p class="section-label">Search</p>
-    <h1 class="page-title">Search all datasets</h1>
+    return `<p class="section-label">${t('sec_search')}</p>
+    <h1 class="page-title">${t('title_search')}</h1>
     <span class="title-rule"></span>
-    <p class="page-sub">Search across all datasets, or use the column filters below</p>
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;">
-      <input class="global-search" type="search" id="sr-global" placeholder="Search all datasets&hellip;" oninput="onSrGlobal()" style="width:320px">
+    <p class="page-sub">${t('sub_search')}</p>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem;">
+      <input class="global-search" type="search" id="sr-global" placeholder="${t('ph_search_all')}" oninput="onSrGlobal()" style="width:320px">
       <div style="display:flex;align-items:center;gap:1.25rem;">
         <span id="sr-count" style="font-size:14px;color:var(--muted)"></span>
-        <button onclick="clearSearchFilters()" style="font-size:13px;color:var(--muted);background:none;border:none;cursor:pointer;padding:0;font-family:inherit">Clear all</button>
+        <button onclick="clearSearchFilters()" style="font-size:13px;color:var(--muted);background:none;border:none;cursor:pointer;padding:0;font-family:inherit">${t('lbl_clear')}</button>
       </div>
+    </div>
+    <div class="sr-year-bar">
+      <span class="sr-year-bar-lbl" id="sr-yr-min-lbl">${SR_YEAR_MIN}</span>
+      <div class="yr-track-wrap" style="flex:1">
+        <div class="yr-track-bg"></div>
+        <div class="yr-track-fill" id="sr-yr-fill"></div>
+        <input type="range" id="sr-yr-min" min="${SR_YEAR_MIN}" max="${SR_YEAR_MAX}" value="${srYearFilter.min}" oninput="onSrYearFilter()">
+        <input type="range" id="sr-yr-max" min="${SR_YEAR_MIN}" max="${SR_YEAR_MAX}" value="${srYearFilter.max}" oninput="onSrYearFilter()">
+      </div>
+      <span class="sr-year-bar-lbl" id="sr-yr-max-lbl">${SR_YEAR_MAX}</span>
     </div>
     <div id="sr-results"></div>`;
   },
 
   ctx_numbers() {
-    return `<p class="section-label">Context</p>
-    <h1 class="page-title">Numbers</h1>
+    return `<p class="section-label">${t('sec_context')}</p>
+    <h1 class="page-title">${t('title_numbers')}</h1>
     <span class="title-rule"></span>
-    <p class="page-sub">Quantitative overview of witchcraft prosecutions in the Danish realm</p>
+    <p class="page-sub">${t('sub_numbers')}</p>
     <div class="prose"></div>`;
   },
 
   ctx_geography() {
-    return `<p class="section-label">Context</p>
-    <h1 class="page-title">Geography</h1>
+    return `<p class="section-label">${t('sec_context')}</p>
+    <h1 class="page-title">${t('title_geography')}</h1>
     <span class="title-rule"></span>
-    <p class="page-sub">Spatial distribution of witchcraft trials across the Danish realm</p>
+    <p class="page-sub">${t('sub_geography')}</p>
     <div class="flourish-wrap">
       <iframe src="https://public.flourish.studio/visualisation/17883692/embed" title="Geographical overview" allowfullscreen></iframe>
     </div>`;
   },
 
   ctx_law() {
-    return `<p class="section-label">Context</p>
-    <h1 class="page-title">Law</h1>
+    return `<p class="section-label">${t('sec_context')}</p>
+    <h1 class="page-title">${t('title_law')}</h1>
     <span class="title-rule"></span>
-    <p class="page-sub">The legal framework governing witchcraft prosecutions, 1540&ndash;1720</p>
+    <p class="page-sub">${t('sub_law')}</p>
     <div class="prose"></div>`;
   },
 
   ctx_history() {
-    return `<p class="section-label">Context</p>
-    <h1 class="page-title">General history</h1>
+    return `<p class="section-label">${t('sec_context')}</p>
+    <h1 class="page-title">${t('title_history')}</h1>
     <span class="title-rule"></span>
-    <p class="page-sub">Historical background to the witch trials of the Danish realm</p>
+    <p class="page-sub">${t('sub_history')}</p>
     <div class="prose"></div>`;
   },
 
-  about() {
-    return `<p class="section-label">About the project</p>
-    <h1 class="page-title">About GODWIT</h1>
+  ctx_numbers_dk() {
+    return `<p class="section-label">${t('sec_ctx_numbers')}</p>
+    <h1 class="page-title">${t('title_numbers_dk')}</h1>
     <span class="title-rule"></span>
-    <p class="page-sub">God, Death and Witchcraft in the Danish Realm</p>
+    <p class="page-sub">${t('sub_numbers_dk')}</p>
+    <div class="prose"></div>`;
+  },
+  ctx_numbers_no() {
+    return `<p class="section-label">${t('sec_ctx_numbers')}</p>
+    <h1 class="page-title">${t('title_numbers_no')}</h1>
+    <span class="title-rule"></span>
+    <p class="page-sub">${t('sub_numbers_no')}</p>
+    <div class="prose"></div>`;
+  },
+  ctx_numbers_sh() {
+    return `<p class="section-label">${t('sec_ctx_numbers')}</p>
+    <h1 class="page-title">${t('title_numbers_sh')}</h1>
+    <span class="title-rule"></span>
+    <p class="page-sub">${t('sub_numbers_sh')}</p>
+    <div class="prose"></div>`;
+  },
+  ctx_numbers_fe() {
+    return `<p class="section-label">${t('sec_ctx_numbers')}</p>
+    <h1 class="page-title">${t('title_numbers_fe')}</h1>
+    <span class="title-rule"></span>
+    <p class="page-sub">${t('sub_numbers_fe')}</p>
+    <div class="prose"></div>`;
+  },
+  ctx_law_dk() {
+    return `<p class="section-label">${t('sec_ctx_law')}</p>
+    <h1 class="page-title">${t('title_law_dk')}</h1>
+    <span class="title-rule"></span>
+    <p class="page-sub">${t('sub_law_dk')}</p>
+    <div class="prose"></div>`;
+  },
+  ctx_law_no() {
+    return `<p class="section-label">${t('sec_ctx_law')}</p>
+    <h1 class="page-title">${t('title_law_no')}</h1>
+    <span class="title-rule"></span>
+    <p class="page-sub">${t('sub_law_no')}</p>
+    <div class="prose"></div>`;
+  },
+  ctx_law_sh() {
+    return `<p class="section-label">${t('sec_ctx_law')}</p>
+    <h1 class="page-title">${t('title_law_sh')}</h1>
+    <span class="title-rule"></span>
+    <p class="page-sub">${t('sub_law_sh')}</p>
+    <div class="prose"></div>`;
+  },
+  ctx_law_fe() {
+    return `<p class="section-label">${t('sec_ctx_law')}</p>
+    <h1 class="page-title">${t('title_law_fe')}</h1>
+    <span class="title-rule"></span>
+    <p class="page-sub">${t('sub_law_fe')}</p>
+    <div class="prose"></div>`;
+  },
+
+  about_project() {
+    return `<p class="section-label">${t('sec_about_godwit')}</p>
+    <h1 class="page-title">${t('title_research')}</h1>
+    <span class="title-rule"></span>
+    <p class="page-sub">${t('sub_research')}</p>
+    <div class="prose"></div>`;
+  },
+  about_employees() {
+    return `<p class="section-label">${t('sec_about_godwit')}</p>
+    <h1 class="page-title">${t('title_employees')}</h1>
+    <span class="title-rule"></span>
+    <p class="page-sub">${t('sub_employees')}</p>
+    <div class="prose"></div>`;
+  },
+  about_contact() {
+    return `<p class="section-label">${t('sec_about_godwit')}</p>
+    <h1 class="page-title">${t('title_contact')}</h1>
+    <span class="title-rule"></span>
+    <p class="page-sub">${t('sub_contact')}</p>
+    <div class="prose">
+      <p>${t('contact_text')} <a href="mailto:GODWIT@sdu.dk">GODWIT@sdu.dk</a>.</p>
+      <p>${t('contact_dept')}<br>${t('contact_uni')}</p>
+    </div>`;
+  },
+
+  about() {
+    return `<p class="section-label">${t('sec_about')}</p>
+    <h1 class="page-title">${t('title_about')}</h1>
+    <span class="title-rule"></span>
+    <p class="page-sub">${t('sub_about')}</p>
     <div class="prose">
       <p>The ideal of the godly state developed during the 16th century. A part of being a godly Christian ruler included eradicating sin and all false Christians. Witches were the epitome of false Christians. This project will explore to what extent witch prosecutions were included in the efforts of establishing a godly Danish monarchy during 1559&ndash;1660.</p>
       <p>The Danish State with its realms was ruled by the Oldenburg monarchs. It encompassed the kingdoms of Denmark and Norway (including territories in present-day Sweden), present-day Iceland, and the duchies of Schleswig and Holstein. These realms had separate jurisdictions and varying degrees of self-determination, but state authorities could issue strict laws against witchcraft. Common to these realms, lay rulers oversaw witch prosecutions.</p>
