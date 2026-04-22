@@ -176,8 +176,8 @@ a:hover { text-decoration: underline; }
 /* ══════════════════════════
    FLYOUT SUBMENU
 ══════════════════════════ */
-.nav-dd-item.has-flyout { position: relative; border-bottom: none; }
-.nav-dd-item.has-flyout::after { content: '›'; margin-left: auto; padding-left: 10px; color: var(--muted); font-size: 13px; }
+.nav-dd-item.has-flyout { position: relative; border-bottom: none; display: flex; align-items: center; font-weight: 400; }
+.nav-dd-item.has-flyout:has(.nav-flyout)::after { content: '›'; margin-left: auto; padding-left: 10px; color: var(--muted); font-size: 13px; }
 .nav-flyout {
   display: none;
   position: fixed;
@@ -670,6 +670,71 @@ tr.detail-row td { padding: 0; border-bottom: 1px solid var(--border); backgroun
   position: fixed;
   z-index: 500;
 }
+
+/* ══════════════════════════
+   EMPLOYEE CARDS
+══════════════════════════ */
+.emp-section-title {
+  font-size: 1.1rem; font-weight: 700; margin: 2rem 0 .9rem;
+  color: var(--text);
+}
+.emp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem; margin-bottom: 1.5rem;
+}
+.emp-card {
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  display: flex; gap: 1rem;
+  padding: 1rem;
+  background: var(--white);
+}
+.emp-photo {
+  width: 90px; height: 110px; flex-shrink: 0;
+  background: var(--light);
+  object-fit: cover; display: block;
+}
+.emp-photo-placeholder {
+  width: 90px; height: 110px; flex-shrink: 0;
+  background: var(--light);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--border); font-size: 2rem;
+}
+.emp-info { display: flex; flex-direction: column; gap: .15rem; }
+.emp-name { font-size: 1rem; font-weight: 700; margin: 0; color: var(--text); }
+.emp-title { font-size: .875rem; color: var(--text); margin: 0; }
+.emp-inst  { font-size: .875rem; color: var(--muted); margin: 0; }
+.emp-email { font-size: .875rem; color: var(--text); margin: .35rem 0 0; }
+.emp-email a { color: var(--text); text-decoration: none; }
+.emp-email a:hover { color: var(--orange); }
+.emp-bio { margin-top: 1rem; font-size: .92rem; line-height: 1.7; color: var(--text); }
+.emp-bio p { margin-bottom: .75rem; }
+
+/* ══════════════════════════
+   EMPLOYEE GRID (compact)
+══════════════════════════ */
+.emp-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+@media (max-width: 700px) { .emp-grid-2 { grid-template-columns: 1fr; } }
+.emp-card-full {
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  display: flex;
+  gap: .9rem;
+  padding: 1rem;
+  background: var(--white);
+  align-items: flex-start;
+}
+.emp-bio-inline {
+  font-size: .85rem; color: var(--muted);
+  line-height: 1.6; margin: .5rem 0 0;
+}
+.emp-bio-inline a { color: var(--orange); text-decoration: none; }
+.emp-bio-inline a:hover { text-decoration: underline; }
 </style>
 </head>
 <body>
@@ -697,23 +762,17 @@ tr.detail-row td { padding: 0; border-bottom: 1px solid var(--border); backgroun
   </div>
   <div class="nav-dd" id="dd-context" onmouseenter="ddEnter('dd-context','btn-context')" onmouseleave="ddLeave()">
     <button class="nav-dd-btn" id="btn-context" onclick="toggleDd2(event)" data-i18n="nav_context">
-      Context
+      History of Witchcraft Trials
     </button>
     <div class="nav-dd-menu" id="dd-context-menu" onmouseenter="ddCancelClose()" onmouseleave="ddLeave()">
-      <div class="nav-dd-item has-flyout" id="flyout-numbers-wrap">
-        Numbers
-        <div class="nav-flyout" id="flyout-numbers">
-          <button onclick="go('ctx_numbers_dk')">Denmark</button>
-          <button onclick="go('ctx_numbers_no')">Norway</button>
-          <button onclick="go('ctx_numbers_sh')">Schleswig-Holstein</button>
-          <button onclick="go('ctx_numbers_fe')">Faroe Islands</button>
-        </div>
-      </div>
-      <button class="nav-dd-item" onclick="go('ctx_geography')">
-        Geography
+      <button class="nav-dd-item has-flyout" onclick="go('ctx_history')">
+        General history
+      </button>
+      <button class="nav-dd-item has-flyout" onclick="go('ctx_geography')">
+        The Danish Realm
       </button>
       <div class="nav-dd-item has-flyout" id="flyout-law-wrap">
-        Law
+        <span onclick="go('ctx_law');closeAllDd()" style="cursor:pointer;flex:1">Legal and punitive pluralism</span>
         <div class="nav-flyout" id="flyout-law">
           <button onclick="go('ctx_law_dk')">Denmark</button>
           <button onclick="go('ctx_law_no')">Norway</button>
@@ -721,8 +780,17 @@ tr.detail-row td { padding: 0; border-bottom: 1px solid var(--border); backgroun
           <button onclick="go('ctx_law_fe')">Faroe Islands</button>
         </div>
       </div>
-      <button class="nav-dd-item" onclick="go('ctx_history')">
-        General history
+      <div class="nav-dd-item has-flyout" id="flyout-numbers-wrap">
+        <span onclick="go('ctx_numbers');closeAllDd()" style="cursor:pointer;flex:1">What's in a number?</span>
+        <div class="nav-flyout" id="flyout-numbers">
+          <button onclick="go('ctx_numbers_dk')">Denmark</button>
+          <button onclick="go('ctx_numbers_no')">Norway</button>
+          <button onclick="go('ctx_numbers_sh')">Schleswig-Holstein</button>
+          <button onclick="go('ctx_numbers_fe')">Faroe Islands</button>
+        </div>
+      </div>
+      <button class="nav-dd-item has-flyout" onclick="go('ctx_literature')">
+        Recommended literature
       </button>
     </div>
   </div>
@@ -751,7 +819,7 @@ tr.detail-row td { padding: 0; border-bottom: 1px solid var(--border); backgroun
 </nav>
 
 <div class="breadcrumb" id="breadcrumb" style="display:none">
-  <span class="bc-current" id="bc-current">Overview</span>
+  <span id="bc-path"></span>
 </div>
 
 <div class="site-body">
@@ -836,18 +904,18 @@ let currentPage = 'overview';
 const STRINGS = {
   en: {
     nav_frontpage:'Frontpage', nav_about:'About GODWIT', nav_research:'Research project',
-    nav_employees:'Employees', nav_contact:'Contact', nav_context:'Context',
-    nav_numbers:'Numbers', nav_geography:'Geography', nav_law:'Law',
-    nav_history:'General history', nav_datasets:'Datasets', nav_search:'Search all',
+    nav_employees:'Employees', nav_contact:'Contact', nav_context:'History of Witchcraft Trials',
+    nav_numbers:'What\'s in a number?', nav_geography:'The Danish Realm', nav_law:'Legal and punitive pluralism',
+    nav_history:'General history', nav_literature:'Recommended literature', nav_datasets:'Datasets', nav_search:'Search all',
     nav_iceland:'Iceland', nav_fe:'Faroe Islands', nav_dk:'Denmark',
     nav_no:'Norway', nav_sh:'Schleswig-Holstein',
-    sec_database:'Database', sec_dataset:'Dataset', sec_context:'Context',
+    sec_database:'Database', sec_dataset:'Dataset', sec_context:'History of Witchcraft Trials',
     sec_about:'About the project', sec_search:'Search', sec_ctx_numbers:'Context › Numbers',
     sec_ctx_law:'Context › Law', sec_about_godwit:'About GODWIT',
     title_frontpage:'Witchcraft Database of the Danish Realm',
     title_fe:'Faroe Islands', title_dk:'Denmark', title_no:'Norway', title_sh:'Schleswig-Holstein',
-    title_numbers:'Numbers', title_geography:'Geography', title_law:'Law',
-    title_history:'General history', title_about:'About GODWIT',
+    title_numbers:'What\'s in a number?', title_geography:'The Danish Realm', title_law:'Legal and punitive pluralism',
+    title_history:'General history', title_literature:'Recommended literature', title_about:'About GODWIT',
     title_research:'Research project', title_employees:'Employees', title_contact:'Contact',
     title_search:'Search all datasets',
     title_numbers_dk:'Numbers — Denmark', title_numbers_no:'Numbers — Norway',
@@ -907,37 +975,37 @@ const STRINGS = {
     breadcrumb_no:'Datasets › Norway',
     breadcrumb_sh:'Datasets › Schleswig-Holstein',
     breadcrumb_search:'Search all',
-    breadcrumb_ctx_numbers:'Context › Numbers',
-    breadcrumb_ctx_geography:'Context › Geography',
-    breadcrumb_ctx_law:'Context › Law',
-    breadcrumb_ctx_history:'Context › General history',
+    breadcrumb_ctx_numbers:'What\'s in a number?',
+    breadcrumb_ctx_geography:'The Danish Realm',
+    breadcrumb_ctx_law:'Legal and punitive pluralism',
+    breadcrumb_ctx_history:'General history', breadcrumb_ctx_literature:'Recommended literature',
     breadcrumb_about:'About GODWIT',
-    breadcrumb_about_project:'About GODWIT › Research project',
-    breadcrumb_about_employees:'About GODWIT › Employees',
-    breadcrumb_about_contact:'About GODWIT › Contact',
-    breadcrumb_ctx_numbers_dk:'Context › Numbers › Denmark',
-    breadcrumb_ctx_numbers_no:'Context › Numbers › Norway',
-    breadcrumb_ctx_numbers_sh:'Context › Numbers › Schleswig-Holstein',
-    breadcrumb_ctx_numbers_fe:'Context › Numbers › Faroe Islands',
-    breadcrumb_ctx_law_dk:'Context › Law › Denmark',
-    breadcrumb_ctx_law_no:'Context › Law › Norway',
-    breadcrumb_ctx_law_sh:'Context › Law › Schleswig-Holstein',
-    breadcrumb_ctx_law_fe:'Context › Law › Faroe Islands',
+    breadcrumb_about_project:'Research project',
+    breadcrumb_about_employees:'Employees',
+    breadcrumb_about_contact:'Contact',
+    breadcrumb_ctx_numbers_dk:'Denmark',
+    breadcrumb_ctx_numbers_no:'Norway',
+    breadcrumb_ctx_numbers_sh:'Schleswig-Holstein',
+    breadcrumb_ctx_numbers_fe:'Faroe Islands',
+    breadcrumb_ctx_law_dk:'Denmark',
+    breadcrumb_ctx_law_no:'Norway',
+    breadcrumb_ctx_law_sh:'Schleswig-Holstein',
+    breadcrumb_ctx_law_fe:'Faroe Islands',
   },
   da: {
     nav_frontpage:'Forside', nav_about:'Om GODWIT', nav_research:'Forskningsprojektet',
-    nav_employees:'Medarbejdere', nav_contact:'Kontakt', nav_context:'Kontekst',
-    nav_numbers:'Tal', nav_geography:'Geografi', nav_law:'Lovgivning',
-    nav_history:'Generel historie', nav_datasets:'Datasæt', nav_search:'Søg i alle',
+    nav_employees:'Medarbejdere', nav_contact:'Kontakt', nav_context:'Trolddomsprocessernes Historie',
+    nav_numbers:'Hvad gemmer sig i et tal?', nav_geography:'Det danske rige', nav_law:'Retslig og strafferetslig pluralisme',
+    nav_history:'Generel historie', nav_literature:'Anbefalet litteratur', nav_datasets:'Datasæt', nav_search:'Søg i alle',
     nav_iceland:'Island', nav_fe:'Færøerne', nav_dk:'Danmark',
     nav_no:'Norge', nav_sh:'Slesvig-Holsten',
-    sec_database:'Database', sec_dataset:'Datasæt', sec_context:'Kontekst',
+    sec_database:'Database', sec_dataset:'Datasæt', sec_context:'Trolddomsprocessernes Historie',
     sec_about:'Om projektet', sec_search:'Søg', sec_ctx_numbers:'Kontekst › Tal',
     sec_ctx_law:'Kontekst › Lovgivning', sec_about_godwit:'Om GODWIT',
     title_frontpage:'Trolddomsdatabasen for det danske rige',
     title_fe:'Færøerne', title_dk:'Danmark', title_no:'Norge', title_sh:'Slesvig-Holsten',
-    title_numbers:'Tal', title_geography:'Geografi', title_law:'Lovgivning',
-    title_history:'Generel historie', title_about:'Om GODWIT',
+    title_numbers:'Hvad gemmer sig i et tal?', title_geography:'Det danske rige', title_law:'Retslig og strafferetslig pluralisme',
+    title_history:'Generel historie', title_literature:'Anbefalet litteratur', title_about:'Om GODWIT',
     title_research:'Forskningsprojektet', title_employees:'Medarbejdere', title_contact:'Kontakt',
     title_search:'Søg i alle datasæt',
     title_numbers_dk:'Tal — Danmark', title_numbers_no:'Tal — Norge',
@@ -997,22 +1065,22 @@ const STRINGS = {
     breadcrumb_no:'Datasæt › Norge',
     breadcrumb_sh:'Datasæt › Slesvig-Holsten',
     breadcrumb_search:'Søg i alle',
-    breadcrumb_ctx_numbers:'Kontekst › Tal',
-    breadcrumb_ctx_geography:'Kontekst › Geografi',
-    breadcrumb_ctx_law:'Kontekst › Lovgivning',
-    breadcrumb_ctx_history:'Kontekst › Generel historie',
+    breadcrumb_ctx_numbers:'Hvad gemmer sig i et tal?',
+    breadcrumb_ctx_geography:'Det danske rige',
+    breadcrumb_ctx_law:'Retslig og strafferetslig pluralisme',
+    breadcrumb_ctx_history:'Generel historie', breadcrumb_ctx_literature:'Anbefalet litteratur',
     breadcrumb_about:'Om GODWIT',
-    breadcrumb_about_project:'Om GODWIT › Forskningsprojektet',
-    breadcrumb_about_employees:'Om GODWIT › Medarbejdere',
-    breadcrumb_about_contact:'Om GODWIT › Kontakt',
-    breadcrumb_ctx_numbers_dk:'Kontekst › Tal › Danmark',
-    breadcrumb_ctx_numbers_no:'Kontekst › Tal › Norge',
-    breadcrumb_ctx_numbers_sh:'Kontekst › Tal › Slesvig-Holsten',
-    breadcrumb_ctx_numbers_fe:'Kontekst › Tal › Færøerne',
-    breadcrumb_ctx_law_dk:'Kontekst › Lovgivning › Danmark',
-    breadcrumb_ctx_law_no:'Kontekst › Lovgivning › Norge',
-    breadcrumb_ctx_law_sh:'Kontekst › Lovgivning › Slesvig-Holsten',
-    breadcrumb_ctx_law_fe:'Kontekst › Lovgivning › Færøerne',
+    breadcrumb_about_project:'Forskningsprojektet',
+    breadcrumb_about_employees:'Medarbejdere',
+    breadcrumb_about_contact:'Kontakt',
+    breadcrumb_ctx_numbers_dk:'Danmark',
+    breadcrumb_ctx_numbers_no:'Norge',
+    breadcrumb_ctx_numbers_sh:'Schleswig-Holstein',
+    breadcrumb_ctx_numbers_fe:'Færøerne',
+    breadcrumb_ctx_law_dk:'Danmark',
+    breadcrumb_ctx_law_no:'Norge',
+    breadcrumb_ctx_law_sh:'Schleswig-Holstein',
+    breadcrumb_ctx_law_fe:'Færøerne',
   }
 };
 function t(k) { return (STRINGS[currentLang] && STRINGS[currentLang][k] !== undefined) ? STRINGS[currentLang][k] : (STRINGS.en[k] || k); }
@@ -1032,12 +1100,15 @@ function updateNavText() {
   if (ctxMenu) {
     const items = ctxMenu.querySelectorAll('.nav-dd-item, .nav-flyout button');
     // Context menu: Numbers, Geography, Law, General history (flyout labels inside .has-flyout are text nodes)
-    const ctxKeys = ['nav_numbers','nav_geography','nav_law','nav_history'];
+    const ctxKeys = ['nav_history','nav_geography','nav_law','nav_numbers','nav_literature'];
     const topItems = ctxMenu.querySelectorAll(':scope > .nav-dd-item, :scope > button');
     topItems.forEach((el, i) => {
       if (ctxKeys[i]) {
+        const sp = el.querySelector('span[onclick]');
+        if (sp) { sp.textContent = t(ctxKeys[i]); return; }
         const tn = [...el.childNodes].filter(n => n.nodeType === 3 && n.textContent.trim());
         if (tn.length) tn[0].textContent = t(ctxKeys[i]);
+        else el.textContent = t(ctxKeys[i]);
       }
     });
     // Flyout sub-items for numbers and law
@@ -15543,7 +15614,7 @@ document.addEventListener('click', function(e) {
 /* ── Navigation ── */
 const DATASET_TABS = ['faeroerne','danmark','norge','slesvig'];
 const ABOUT_TABS  = ['about_project','about_employees','about_contact'];
-const CONTEXT_TABS = ['ctx_numbers','ctx_geography','ctx_law','ctx_history','ctx_numbers_dk','ctx_numbers_no','ctx_numbers_sh','ctx_numbers_fe','ctx_law_dk','ctx_law_no','ctx_law_sh','ctx_law_fe'];
+const CONTEXT_TABS = ['ctx_numbers','ctx_geography','ctx_law','ctx_history','ctx_literature','ctx_numbers_dk','ctx_numbers_no','ctx_numbers_sh','ctx_numbers_fe','ctx_law_dk','ctx_law_no','ctx_law_sh','ctx_law_fe'];
 
 function go(tab, btn) {
   document.querySelectorAll('#top-nav > button').forEach(b => b.classList.remove('on'));
@@ -15587,7 +15658,7 @@ function go(tab, btn) {
     norge: t('breadcrumb_no'), slesvig: t('breadcrumb_sh'),
     search: t('breadcrumb_search'),
     ctx_numbers: t('breadcrumb_ctx_numbers'), ctx_geography: t('breadcrumb_ctx_geography'),
-    ctx_law: t('breadcrumb_ctx_law'), ctx_history: t('breadcrumb_ctx_history'),
+    ctx_law: t('breadcrumb_ctx_law'), ctx_history: t('breadcrumb_ctx_history'), ctx_literature: t('breadcrumb_ctx_literature'),
     ctx_numbers_dk: t('breadcrumb_ctx_numbers_dk'), ctx_numbers_no: t('breadcrumb_ctx_numbers_no'),
     ctx_numbers_sh: t('breadcrumb_ctx_numbers_sh'), ctx_numbers_fe: t('breadcrumb_ctx_numbers_fe'),
     ctx_law_dk: t('breadcrumb_ctx_law_dk'), ctx_law_no: t('breadcrumb_ctx_law_no'),
@@ -15596,11 +15667,42 @@ function go(tab, btn) {
     about_project: t('breadcrumb_about_project'), about_employees: t('breadcrumb_about_employees'),
     about_contact: t('breadcrumb_about_contact'),
   };
+  // Build breadcrumb path: array of [label, tab] pairs ending with current
+  const bcParents = {
+    faeroerne:        [['GODWIT', 'overview']],
+    ctx_numbers:      [['GODWIT', 'overview']],
+    ctx_geography:    [['GODWIT', 'overview']],
+    ctx_law:          [['GODWIT', 'overview']],
+    ctx_history:      [['GODWIT', 'overview']],
+    ctx_literature:   [['GODWIT', 'overview']],
+    ctx_numbers_dk:   [['GODWIT', 'overview'], [t('breadcrumb_ctx_numbers'), 'ctx_numbers']],
+    ctx_numbers_no:   [['GODWIT', 'overview'], [t('breadcrumb_ctx_numbers'), 'ctx_numbers']],
+    ctx_numbers_sh:   [['GODWIT', 'overview'], [t('breadcrumb_ctx_numbers'), 'ctx_numbers']],
+    ctx_numbers_fe:   [['GODWIT', 'overview'], [t('breadcrumb_ctx_numbers'), 'ctx_numbers']],
+    ctx_law_dk:       [['GODWIT', 'overview'], [t('breadcrumb_ctx_law'), 'ctx_law']],
+    ctx_law_no:       [['GODWIT', 'overview'], [t('breadcrumb_ctx_law'), 'ctx_law']],
+    ctx_law_sh:       [['GODWIT', 'overview'], [t('breadcrumb_ctx_law'), 'ctx_law']],
+    ctx_law_fe:       [['GODWIT', 'overview'], [t('breadcrumb_ctx_law'), 'ctx_law']],
+    about:            [['GODWIT', 'overview']],
+    about_project:    [['GODWIT', 'overview'], [t('breadcrumb_about'), 'about']],
+    about_employees:  [['GODWIT', 'overview'], [t('breadcrumb_about'), 'about']],
+    about_contact:    [['GODWIT', 'overview'], [t('breadcrumb_about'), 'about']],
+  };
   const bcBar = document.getElementById('breadcrumb');
-  const bc = document.getElementById('bc-current');
-  if (bc) bc.textContent = labels[tab] || tab;
-  const bcTabs = ['faeroerne','ctx_numbers','ctx_geography','ctx_law','ctx_history','ctx_numbers_dk','ctx_numbers_no','ctx_numbers_sh','ctx_numbers_fe','ctx_law_dk','ctx_law_no','ctx_law_sh','ctx_law_fe','about_project','about_employees','about_contact'];
+  const bcPath = document.getElementById('bc-path');
+  const bcTabs = Object.keys(bcParents);
   if (bcBar) bcBar.style.display = bcTabs.includes(tab) ? 'flex' : 'none';
+  if (bcPath && bcTabs.includes(tab)) {
+    const sep = t('bc_sep');
+    const parents = bcParents[tab] || [];
+    const current = labels[tab] || tab;
+    let html = '';
+    parents.forEach(function(pair) {
+      html += '<a onclick="go(\'' + pair[1] + '\')" style="cursor:pointer">' + pair[0] + '</a>' + sep;
+    });
+    html += '<span class="bc-current">' + current + '</span>';
+    bcPath.innerHTML = html;
+  }
 }
 
 
@@ -16125,6 +16227,13 @@ const PAGES = {
     <div class="prose"></div>`;
   },
 
+  ctx_literature() {
+    return `<p class="section-label">${t('sec_context')}</p>
+    <h1 class="page-title">${t('title_literature')}</h1>
+    <span class="title-rule"></span>
+    <div class="prose"></div>`;
+  },
+
   ctx_numbers_dk() {
     return `<p class="section-label">${t('sec_ctx_numbers')}</p>
     <h1 class="page-title">${t('title_numbers_dk')}</h1>
@@ -16186,17 +16295,79 @@ const PAGES = {
     return `<p class="section-label">${t('sec_about_godwit')}</p>
     <h1 class="page-title">${t('title_research')}</h1>
     <span class="title-rule"></span>
-    <p class="page-sub">${t('sub_research')}</p>
-    <div class="prose"></div>`;
+    <div class="prose">
+
+      <h2>SP1: The King and Council in Witch Trials</h2>
+      <p>SP1 analyses two important aspects of an early modern monarch in an age of religious division through the lens of witch trials. What drove Christian IV to intervene in witch trials and in what ways? To what extent did he rely on the council or on specific members? Ongoing research on the formation of Christian IV's worldview has proven him to be mediating in the early years of his rule, which does not tally with the well-known interference in later witch trials. This calls for a complete assessment. The increasing involvement in witch trials developed simultaneously with a still more arbitrary rule and disputes with certain members of the council and nobility. How are these events and arbitrary rule linked to witch trials and do they correlate?</p>
+      <p>A second aspect is linked to the impact of the Lutheran-Evangelical Reformation of the Kingdom. How did the close ties between the King, council and leading members of the Church impact trials for witchcraft brought to the King's attention?</p>
+
+      <h2>SP2: The King's Lieutenants in Witch Trials</h2>
+      <p>How did the king's lieutenants act in trials for witchcraft? They were appointed by the king to execute his power personally in the fief, and on a local level, they were masters of the household. In 1617 the king's lieutenants received clear orders to prosecute any cases of witchcraft, or risk punishment themselves. How did they carry out the law? We know that some appeared in person at witchcraft trials where their mere appearance would probably be enough to impact the jury, even if they did not directly take part.</p>
+      <p>Preliminary data shows a notable variety in intensity of witch trials throughout the Danish realms, indicating that at least some king's lieutenants were less rigid in following the orders of their king. Is it possible to detect any general patterns by focusing on specific realms? Did certain fiefs and their rulers stand out? Is it possible to determine their motives through their networks in local society or among the royal circles? More generally, how did ideas, beliefs and actions of individual agents come to influence not only individual cases, but also the overall course of persecutions?</p>
+
+      <h2>SP3: Lutheran Pastors in Witch Trials</h2>
+      <p>This subproject examines the role of Lutheran parish priests in early modern Danish witchcraft prosecutions, exploring how local clergy navigated between theological doctrine, communal pressure, and judicial procedure in cases of suspected witchcraft.</p>
+
+      <h2>SP4: Revisiting the Case of Maren Splids</h2>
+      <p>The case of Maren Splids is probably the most (in)famous witch trial in Denmark. In the context of this project, the trial provides the only known example of the king overruling an acquittal passed by the Court of the Magistrate (<em>rådstuen</em>) and demanding the case be brought to the King's Court (<em>Kongens Retterting</em>). How did the interplay between local and central power holders unfold? During the case a new king's lieutenant was appointed, who was shortly thereafter accepted into the council. How did these offices correlate — or did they collide?</p>
+      <p>Compared to the level of fame of this case, it is remarkable that it has not been subject to historical analysis since 1981, and never in the context of the witch prosecutions. The exceptional case contributes to our understanding of the general picture: the king's interference was a clear example of the execution of power. SP4 ties together SP1, SP2 and SP3 by mapping and explaining the interplay between local pastors, the king's lieutenants and central power holders.</p>
+
+    </div>`;
   },
   about_employees() {
     return `<p class="section-label">${t('sec_about_godwit')}</p>
     <h1 class="page-title">${t('title_employees')}</h1>
     <span class="title-rule"></span>
-    <p class="page-sub">${t('sub_employees')}</p>
-    <div class="prose"></div>`;
+
+    <div class="emp-grid-2" style="margin-top:1.5rem">
+
+      <div class="emp-card-full">
+        <div class="emp-photo-placeholder">👤</div>
+        <div class="emp-info-full">
+          <p class="emp-name">Louise Nyholm Kallestrup</p>
+          <p class="emp-title">Professor · Head of Ph.D. School, Faculty of Humanities</p>
+          <p class="emp-inst">University of Southern Denmark</p>
+          <p class="emp-email"><a href="mailto:lnk@sdu.dk">lnk@sdu.dk</a> · <a href="https://orcid.org/0000-0002-4598-9401" target="_blank">ORCID</a></p>
+          <p class="emp-bio-inline">Professor of Early Modern History specialising in witchcraft prosecutions in early modern Denmark, c. 1550–1650. Her research also encompasses the Roman Inquisition, the history of crime, and cultural and social history. Author of <em>The Construction of Witchcraft in Early Modern Denmark</em> (Routledge, 2025) and co-editor of <em>A Cultural History of Magic</em>, 6 vols. (Bloomsbury, 2025).</p>
+        </div>
+      </div>
+
+      <div class="emp-card-full">
+        <div class="emp-photo-placeholder">👤</div>
+        <div class="emp-info-full">
+          <p class="emp-name">Emilie Luther Valentin</p>
+          <p class="emp-title">Ph.D., Research Assistant</p>
+          <p class="emp-inst">University of Southern Denmark</p>
+          <p class="emp-email"><a href="mailto:evalentin@sdu.dk">evalentin@sdu.dk</a> · <a href="https://orcid.org/0000-0003-4414-4973" target="_blank">ORCID</a></p>
+          <p class="emp-bio-inline">Postdoctoral researcher on the GODWIT project. Her research examines the role of parish priests in early modern Danish witchcraft prosecutions. Holds a Ph.D. from Aalborg University (2022). Also responsible for the construction and maintenance of the GODWIT database.</p>
+        </div>
+      </div>
+
+      <div class="emp-card-full">
+        <div class="emp-photo-placeholder">👤</div>
+        <div class="emp-info-full">
+          <p class="emp-name">Louise Hauberg Lindgaard</p>
+          <p class="emp-title">Ph.D.</p>
+          <p class="emp-inst">University of Southern Denmark</p>
+          <p class="emp-bio-inline">Ph.D. fellow on the GODWIT project, examining the role and agency of the <em>lensmænd</em> in Danish witchcraft cases (1584–1660). Her dissertation was defended on 27 March 2026. Previously museum curator at Sydvestjyske Museer and part of the founding team behind HEX! Museum of Witch Hunt (2020). Research interests include the Danish witch trials (1550–1660) and magical practice (1550–1900).</p>
+        </div>
+      </div>
+
+      <div class="emp-card-full">
+        <div class="emp-photo-placeholder">👤</div>
+        <div class="emp-info-full">
+          <p class="emp-name">Gunnar Winsnes Knutsen</p>
+          <p class="emp-title">Professor, Early Modern History</p>
+          <p class="emp-inst">University of Bergen</p>
+          <p class="emp-email"><a href="mailto:gunnar.knutsen@uib.no">gunnar.knutsen@uib.no</a></p>
+          <p class="emp-bio-inline">Professor at the University of Bergen focusing on belief and action in early modern Europe, with particular attention to witchcraft trials, the Spanish Inquisition, and wars of religion. Current research applies AI tools to historical sources. Principal Investigator of <a href="https://emid.uib.no" target="_blank">EMID</a>, a database of Inquisition trials.</p>
+        </div>
+      </div>
+
+    </div>`;
   },
-  about_contact() {
+
+      about_contact() {
     return `<p class="section-label">${t('sec_about_godwit')}</p>
     <h1 class="page-title">${t('title_contact')}</h1>
     <span class="title-rule"></span>
@@ -16217,14 +16388,7 @@ const PAGES = {
       <p>The Danish State with its realms was ruled by the Oldenburg monarchs. It encompassed the kingdoms of Denmark and Norway (including territories in present-day Sweden), present-day Iceland, and the duchies of Schleswig and Holstein. These realms had separate jurisdictions and varying degrees of self-determination, but state authorities could issue strict laws against witchcraft. Common to these realms, lay rulers oversaw witch prosecutions.</p>
       <p>Based on four intertwined subprojects, the overall aim of this project is to clarify the responsibilities of the king, the Council, the king&rsquo;s lieutenants, and the parish priests, and how these groups engaged in trials for witchcraft.</p>
     </div>
-    <div class="about-meta">
-      <div class="meta-row"><label>Principal investigator</label>
-        <span>Louise Nyholm Kallestrup &middot; <a href="mailto:LNK@sdu.dk">LNK@sdu.dk</a></span></div>
-      <div class="meta-row"><label>Institution</label>
-        <span>Department of History, University of Southern Denmark</span></div>
-      <div class="meta-row"><label>Primary source (Faroe Islands)</label>
-        <span>Andersen, N.C.: <em>F&aelig;r&oslash;ernes Historie</em> &middot; <em>Amtstidende for F&aelig;r&oslash;erne</em> 1880 &middot; <em>Museum</em> 1893 II</span></div>
-    </div>`;
+`;
   }
 };
 
